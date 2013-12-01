@@ -5,18 +5,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
-public class MineFieldButton extends JButton {
+public class MineButton extends JButton {
 
     private int posX;
     private int posY;
     private final Square square;
 
-    public MineFieldButton(int posX, int posY, Square square) {
-        super(" ");
+    public MineButton(int posX, int posY, Square square) {
+        super("   ");
         this.posX = posX;
         this.posY = posY;
         this.square = square;
-        this.setSize(30, 30);//------------------------¿HACE ALGO ESTA LINEA?
         this.setEnabled(true);
         this.addActionListener(new ActionListener() {
             @Override
@@ -28,9 +27,9 @@ public class MineFieldButton extends JButton {
 
     private void addActions() {
         if (this.square.isMine()) {
-            MineFieldViewer.gameOver();
+            MineFieldPanel.partIsOver();
         } else {
-            MineFieldViewer.reLoad(posX, posY);
+            MineFieldPanel.reLoad(posX, posY);
         }
     }
 

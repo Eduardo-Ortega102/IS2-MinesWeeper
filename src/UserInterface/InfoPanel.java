@@ -25,7 +25,7 @@ public class InfoPanel extends JPanel {
             }
         });
     }
-
+    
     public static void start() {
         clock.start();
     }

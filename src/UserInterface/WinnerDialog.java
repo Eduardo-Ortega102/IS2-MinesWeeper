@@ -7,12 +7,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
-public class Winner extends JFrame{
+public class WinnerDialog extends JFrame{
     private JButton exitButton;
     private JButton playAgainButton;
     private Command command;
 
-    public Winner() throws HeadlessException {
+    public WinnerDialog() throws HeadlessException {
         this.setTitle("You Win");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLocation(100, 100);
@@ -47,8 +47,7 @@ public class Winner extends JFrame{
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                command.executeCommand(new int[]{0});
-                exit();
+                command.executeCommand(0);
             }
         });
     }
@@ -58,14 +57,8 @@ public class Winner extends JFrame{
         playAgainButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                command.executeCommand(new int[]{1});
-                exit();
+                command.executeCommand(3);
             }
         });
     }
-    
-    public void exit(){
-        this.dispose();
-    }
-
 }

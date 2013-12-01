@@ -9,7 +9,8 @@ import javax.swing.*;
 public class OptionDialog extends JFrame {
 
     private static OptionDialog instance;
-    private Command command;
+    private Command createCommand;
+    private Command killCommand;
     private JRadioButton easyButton;
     private JRadioButton intermediateButton;
     private JRadioButton advancedButton;
@@ -18,8 +19,9 @@ public class OptionDialog extends JFrame {
     private JTextField column;
     private JTextField mines;
 
-    private OptionDialog(Command command) throws HeadlessException {
-        this.command = command;
+    private OptionDialog(Command createCommand, Command killCommand) throws HeadlessException {
+        this.createCommand = createCommand;
+        this.killCommand = killCommand;
         setTitle("Options");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         add(new Label("Select dificulty"), BorderLayout.NORTH);
@@ -28,8 +30,12 @@ public class OptionDialog extends JFrame {
         pack();
     }
 
-    public static void createInstance(Command command) {
-        if (instance == null) instance = new OptionDialog(command);
+    public static OptionDialog getInstance() {
+        return instance;
+    }
+
+    public static void createInstance(Command createCommand, Command killCommand) {
+        if (instance == null) instance = new OptionDialog(createCommand, killCommand);
     }
 
     public static void execute() {
@@ -81,7 +87,7 @@ public class OptionDialog extends JFrame {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                command.executeCommand(new int[]{
+                createCommand.executeCommand(new int[]{
                     Integer.parseInt(rows.getText()),
                     Integer.parseInt(column.getText()),
                     Integer.parseInt(mines.getText())});
@@ -96,15 +102,10 @@ public class OptionDialog extends JFrame {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                exit();
+                killCommand.executeCommand(0);
             }
         });
         return button;
-    }
-
-    private void exit() {
-        instance.dispose();
-        this.dispose();
     }
 
     private void createsEasyCheckBox() {

@@ -1,6 +1,5 @@
 package UserInterface;
 
-import Control.Command;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,25 +9,14 @@ public class MinesWeeperMainFrame extends JFrame {
 
     public MinesWeeperMainFrame() throws HeadlessException {
         this.setTitle("Minesweeper");
-        this.setSize(350, 300);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.add(createToolbar(), BorderLayout.NORTH);
-        this.add(new InfoPanel(), BorderLayout.SOUTH);
-
-        Command<Integer> command = new Command<Integer>() {
-
-            @Override
-            public void executeCommand(Integer option) {
-                if (option == 0) {
-                    kill();
-                } else {
-                    kill();
-                    OptionDialog.execute();
-                }
-            }
-        };
-        this.add(new MineFieldViewer(command), BorderLayout.CENTER);
-
+    }
+    
+    public void execute(InfoPanel infoPanel, MineFieldPanel minesPanel){
+        this.add(infoPanel, BorderLayout.SOUTH);
+        this.add(minesPanel, BorderLayout.CENTER);
+        this.pack();
         this.setVisible(true);
     }
 

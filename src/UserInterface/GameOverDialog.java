@@ -1,22 +1,20 @@
 package UserInterface;
 
 import Control.Command;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.HeadlessException;
-import java.awt.PopupMenu;
+import java.awt.*;
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.*;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
 
-public class GameOver extends JFrame {
+public class GameOverDialog extends JFrame {
+
     private JButton exitButton;
-    private JButton playAgainButton;
+    private JButton playNewGameButton;
     private JButton restartThisGame;
     private Command command;
 
-    public GameOver(Command command) throws HeadlessException {
+    public GameOverDialog(Command command) throws HeadlessException {
         this.command = command;
         this.setTitle("Game Over");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -25,10 +23,8 @@ public class GameOver extends JFrame {
         this.add(createButtonbar(), BorderLayout.SOUTH);
         this.pack();
     }
-    public void kill(){
-        dispose();
-    }
-    public void execute(){
+
+    public void execute() {
         this.setVisible(true);
     }
 
@@ -45,8 +41,7 @@ public class GameOver extends JFrame {
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                kill();
-                command.executeCommand(new int[]{0});
+                command.executeCommand(0);
             }
         });
         return exitButton;
@@ -57,23 +52,25 @@ public class GameOver extends JFrame {
         restartThisGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MineFieldViewer.restart();
-                kill();
+                MineFieldPanel.restart();
+                visible();
             }
         });
         return restartThisGame;
     }
 
     private JButton createNewGameButton() {
-        playAgainButton = new JButton("Play New Game");
-        playAgainButton.addActionListener(new ActionListener() {
+        playNewGameButton = new JButton("Play New Game");
+        playNewGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                command.executeCommand(new int[]{1});
-                kill();
+                command.executeCommand(3);
             }
         });
-        return playAgainButton;
+        return playNewGameButton;
     }
 
+    private void visible() {
+        this.setVisible(false);
+    }
 }

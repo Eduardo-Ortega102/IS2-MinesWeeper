@@ -1,7 +1,6 @@
 package Control;
 
 import Persistence.MineLoader;
-import UserInterface.MinesWeeperMainFrame;
 import UserInterface.OptionDialog;
 
 public class Control {
@@ -17,15 +16,16 @@ public class Control {
                 start(parameter[0], parameter[1], parameter[2]);
             }
         };
-        OptionDialog.createInstance(controlCommand);
+        
+        OptionDialog.createInstance(controlCommand, UIControl.getKillCommand());
         OptionDialog.execute();
     }
 
     public static void start(int rows, int columns, int mines) {
         try {
             load.buildMineField(rows, columns, mines, 1);
+            UIControl.execute();
         } catch (Exception ex) {
         }
-        MinesWeeperMainFrame frame = new MinesWeeperMainFrame();
     }
 }

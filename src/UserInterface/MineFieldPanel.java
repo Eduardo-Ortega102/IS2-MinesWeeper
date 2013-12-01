@@ -5,24 +5,26 @@ import Model.MineField;
 import java.awt.*;
 import javax.swing.*;
 
-public class MineFieldViewer extends JPanel {
+public class MineFieldPanel extends JPanel {
 
-    private static MineFieldButton[][] matrix;
+    private static MineButton[][] matrix;
     private static Command command;
     private static int squareNumber;
     private static int count;
+    private static int time;
 
-    public MineFieldViewer(Command command) {
-        MineFieldViewer.command = command;
+    public MineFieldPanel(Command command) {
         MineField mineField = MineField.getInstance();
-        matrix = new MineFieldButton[mineField.getHigh()][mineField.getWidth()];
+        time = 0;
+        squareNumber = mineField.getHigh()*mineField.getWidth();
+        matrix = new MineButton[mineField.getHigh()][mineField.getWidth()];
+        MineFieldPanel.command = command;
         this.setBackground(Color.red);
         this.setLayout(new GridLayout(mineField.getHigh(), mineField.getWidth()));
-        squareNumber = mineField.getHigh()*mineField.getWidth();
         
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[i].length; j++) {
-                matrix[i][j] = new MineFieldButton(i, j, mineField.getMineField()[i][j]);
+                matrix[i][j] = new MineButton(i, j, mineField.getMineField()[i][j]);
             }
         }
 
@@ -31,12 +33,11 @@ public class MineFieldViewer extends JPanel {
                 this.add(matrix[i][j]);
             }
         }
-        
-        InfoPanel.start();
     }
     
     public static void restart(){
         count = 0;
+        time = 0;
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[i].length; j++) {
                 matrix[i][j].setText("");
@@ -45,22 +46,18 @@ public class MineFieldViewer extends JPanel {
         }
     }
 
-    public static void gameOver() {
-        InfoPanel.stop();
-        GameOver gameOver = new GameOver(command);
-        gameOver.execute();
-    }
-    
-    public static void winner() {
-        InfoPanel.stop();
-        Winner win = new Winner();
-        win.execute(command);
-    }
-
     public static void reLoad(int posX, int posY) {
+        if(time == 0)InfoPanel.start();
+        time = 1;
         reLoadColumnButton(posX, posY, false);
         countDisableButtons();
-        if ((squareNumber - count) == MineField.getInstance().getMinesNumber()) winner();
+        if ((squareNumber - count) == MineField.getInstance().getMinesNumber()){
+            command.executeCommand(1);
+        }
+    }
+    
+    public static void partIsOver(){
+        command.executeCommand(0);
     }
 
     private static int reLoadColumnButton(int posX, int posY, boolean stop) {
