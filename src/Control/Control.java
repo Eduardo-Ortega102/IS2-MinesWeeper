@@ -7,11 +7,11 @@ import UserInterface.OptionDialog;
 public class Control {
 
     private static MineLoader load;
-    private static Command controlCommand;
+    private static Command<int[]> controlCommand;
 
     public static void execute(MineLoader load) {
         Control.load = load;
-        controlCommand = new Command() {
+        controlCommand = new Command<int[]>() {
             @Override
             public void executeCommand(int[] parameter) {
                 start(parameter[0], parameter[1], parameter[2]);

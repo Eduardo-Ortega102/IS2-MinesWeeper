@@ -31,15 +31,28 @@ public class MineFieldViewer extends JPanel {
                 this.add(matrix[i][j]);
             }
         }
-
+        
+        InfoPanel.start();
+    }
+    
+    public static void restart(){
+        count = 0;
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                matrix[i][j].setText("");
+                matrix[i][j].setEnabled(true);
+            }
+        }
     }
 
     public static void gameOver() {
-        GameOver gameOver = new GameOver();
+        InfoPanel.stop();
+        GameOver gameOver = new GameOver(command);
         gameOver.execute();
     }
     
     public static void winner() {
+        InfoPanel.stop();
         Winner win = new Winner();
         win.execute(command);
     }

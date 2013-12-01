@@ -15,10 +15,11 @@ public class MinesWeeperMainFrame extends JFrame {
         this.add(createToolbar(), BorderLayout.NORTH);
         this.add(new InfoPanel(), BorderLayout.SOUTH);
 
-        Command command = new Command() {
+        Command<Integer> command = new Command<Integer>() {
+
             @Override
-            public void executeCommand(int[] option) {
-                if (option[0] == 0) {
+            public void executeCommand(Integer option) {
+                if (option == 0) {
                     kill();
                 } else {
                     kill();
@@ -26,7 +27,6 @@ public class MinesWeeperMainFrame extends JFrame {
                 }
             }
         };
-
         this.add(new MineFieldViewer(command), BorderLayout.CENTER);
 
         this.setVisible(true);
