@@ -23,7 +23,6 @@ public class MineFieldLoader implements MineLoader{
 
     @Override
     public void buildMineField(int high, int width, int minesNumber, final int X) throws Exception{
-        if (fieldInstance == null) {
             MineField.createInstance(high, width, minesNumber);
             fieldInstance = MineField.getInstance();
             maxMinePerRow = X;
@@ -34,19 +33,6 @@ public class MineFieldLoader implements MineLoader{
 
             System.out.println("CAMPO RESULTANTE: ");
             MineField.print(fieldInstance.getMineField());
-        }else{
-            throw new Exception("The object has already been created before.");
-        }
-    }
-
-    @Override
-    public void reBuildMineField(int high, int width, int minesNumber, final int X) {
-        fieldInstance = null;
-        minesPerRow = null;
-        try {
-            buildMineField(high, width, minesNumber, X);
-        } catch (Exception ex) {
-        }
     }
 
     private void inicializeMinesPerRow(int high) {
@@ -82,6 +68,12 @@ public class MineFieldLoader implements MineLoader{
             }
             maxMinePerRow += 1;
         }
+        
+        /**
+         * --------------------------------
+         * ----------BORRAR LA SIGUIENTE INSTRUCCION
+         * --------------------------------
+         */
         MineField.print(mineField);
     }
 

@@ -1,5 +1,6 @@
 package UserInterface;
 
+import Control.Command;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,12 +14,24 @@ public class MinesWeeperMainFrame extends JFrame {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.add(createToolbar(), BorderLayout.NORTH);
         this.add(new InfoPanel(), BorderLayout.SOUTH);
-        
-        this.add(new MineFieldViewer(), BorderLayout.CENTER);
-        
+
+        Command command = new Command() {
+            @Override
+            public void executeCommand(int[] option) {
+                if (option[0] == 0) {
+                    kill();
+                } else {
+                    kill();
+                    OptionDialog.execute();
+                }
+            }
+        };
+
+        this.add(new MineFieldViewer(command), BorderLayout.CENTER);
+
         this.setVisible(true);
     }
-    
+
     private JPanel createToolbar() {
         JPanel panel = new JPanel();
         panel.setBackground(Color.BLUE);
@@ -63,7 +76,7 @@ public class MinesWeeperMainFrame extends JFrame {
         item.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                exit();
+                kill();
             }
         });
         return item;
@@ -74,8 +87,7 @@ public class MinesWeeperMainFrame extends JFrame {
         return item;
     }
 
-    private void exit() {
+    public void kill() {
         dispose();
     }
-    
 }
