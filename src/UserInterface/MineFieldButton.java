@@ -17,6 +17,7 @@ public class MineFieldButton extends JButton {
         this.posY = posY;
         this.square = square;
         this.setSize(30, 30);//------------------------¿HACE ALGO ESTA LINEA?
+        this.setEnabled(true);
         this.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -46,10 +47,11 @@ public class MineFieldButton extends JButton {
     }
 
     public boolean showValue() {
-        boolean value = true;
+        if(this.isEnabled() == false)return true;
+        boolean value = false;
         if (this.square.getAdjacentMines() != 0) {
             this.setText(Integer.toString(square.getAdjacentMines()));
-            value = false;
+            value = true;
         }
         this.setEnabled(false);
         return value;
