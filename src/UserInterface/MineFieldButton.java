@@ -40,12 +40,19 @@ public class MineFieldButton extends JButton {
             MineFieldViewer.reLoad(posX, posY);
         }
     }
+    
+    public boolean isNotMine(){
+        return (this.square.isMine())? false:true;
+    }
 
-    private void execute() {
+    public boolean showValue() {
+        boolean value = true;
         if (this.square.getAdjacentMines() != 0) {
             this.setText(Integer.toString(square.getAdjacentMines()));
+            value = false;
         }
         this.setEnabled(false);
+        return value;
     }
 
     private void gameOver() {

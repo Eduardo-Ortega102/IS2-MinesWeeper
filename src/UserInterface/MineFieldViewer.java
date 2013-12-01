@@ -36,24 +36,45 @@ public class MineFieldViewer extends JPanel {
     }
 
     public static void reLoad(int posX, int posY) {
-        matrix[posX][posY].setEnabled(false);
-        reLoadColumnButton(posX,posY);
-        reLoadRowButton(posX,posY);
-        reLoadDiagonalButton(posX,posY);
-       
-        
-        for (int i = posX; i < matrix.length; i++) {
-            for (int j = posY; j < matrix[i].length; j++) {
-            }
+        boolean adjacentMines = matrix[posX][posY].showValue();
+        if (adjacentMines) {
+            reLoadColumnButton(posX,posY);
+            reLoadRowButton(posX,posY);
         }
+        //reLoadDiagonalButton(posX,posY);
+        
     }
 
     private static void reLoadColumnButton(int posX, int posY) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int index = posY - 1;
+        boolean execute = true;
+        while(index >= 0 && matrix[posX][index].isNotMine() && execute){
+            execute = matrix[posX][index].showValue();
+            index--;
+        }
+        
+        execute = true;
+        index = posY + 1;
+        while(index < matrix.length && matrix[posX][index].isNotMine() && execute){
+            execute = matrix[posX][index].showValue();
+            index++;
+        }
     }
 
     private static void reLoadRowButton(int posX, int posY) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int index = posX - 1;
+        boolean execute = true;
+        while(index >= 0 && matrix[index][posY].isNotMine() && execute){
+            execute = matrix[index][posY].showValue();
+            index--;
+        }
+        
+        execute = true;
+        index = posX + 1;
+        while(index < matrix[0].length && matrix[index][posY].isNotMine() && execute){
+            execute = matrix[index][posY].showValue();
+            index++;
+        }
     }
 
     private static void reLoadDiagonalButton(int posX, int posY) {

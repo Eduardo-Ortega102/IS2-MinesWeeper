@@ -4,45 +4,59 @@ import Model.MineField;
 import Model.Square;
 import java.util.Random;
 
-public class MineFieldLoader {
+public class MineFieldLoader implements MineLoader{
 
-    private static MineField instance;
+    private static MineField fieldInstance;
+    private static MineFieldLoader loaderInstance;
     private static int[] minesPerRow;
     private static int maxMinePerRow;
 
-    public static MineField getInstance() {
-        return instance;
+    private MineFieldLoader() {
     }
 
-    public static void builtMineField(int high, int width, int minesNumber, final int X) {
-        if (instance == null) {
+    public static MineFieldLoader getInstance() {
+        if (loaderInstance == null) {
+            loaderInstance = new MineFieldLoader();
+        }
+        return loaderInstance;
+    }
+
+    @Override
+    public void buildMineField(int high, int width, int minesNumber, final int X) throws Exception{
+        if (fieldInstance == null) {
             MineField.createInstance(high, width, minesNumber);
-            instance = MineField.getInstance();
+            fieldInstance = MineField.getInstance();
             maxMinePerRow = X;
-            inicializeMinesPerRow(instance.getHigh());
-            createMineField(instance.getMineField());
-            mineFieldSetter(minesNumber, instance.getMineField());
-            inicializeAdjacentMinesValue(instance.getMineField());
+            inicializeMinesPerRow(fieldInstance.getHigh());
+            createMineField(fieldInstance.getMineField());
+            mineFieldSetter(minesNumber, fieldInstance.getMineField());
+            inicializeAdjacentMinesValue(fieldInstance.getMineField());
 
             System.out.println("CAMPO RESULTANTE: ");
-            MineField.print(instance.getMineField());
+            MineField.print(fieldInstance.getMineField());
+        }else{
+            throw new Exception("The object has already been created before.");
         }
     }
 
-    public static void reBuiltMineField(int high, int width, int minesNumber, final int X) {
-        instance = null;
+    @Override
+    public void reBuildMineField(int high, int width, int minesNumber, final int X) {
+        fieldInstance = null;
         minesPerRow = null;
-        builtMineField(high, width, minesNumber, X);
+        try {
+            buildMineField(high, width, minesNumber, X);
+        } catch (Exception ex) {
+        }
     }
 
-    private static void inicializeMinesPerRow(int high) {
+    private void inicializeMinesPerRow(int high) {
         minesPerRow = new int[high];
         for (int i = 0; i < minesPerRow.length; i++) {
             minesPerRow[i] = 0;
         }
     }
 
-    private static void createMineField(Square[][] mineField) {
+    private void createMineField(Square[][] mineField) {
         for (int i = 0; i < mineField.length; i++) {
             for (int j = 0; j < mineField[i].length; j++) {
                 mineField[i][j] = new Square(false);
@@ -50,13 +64,13 @@ public class MineFieldLoader {
         }
     }
 
-    private static void mineFieldSetter(int minesNumber, Square[][] mineField) {
-        int fieldElements = instance.getHigh() * instance.getWidth();
+    private void mineFieldSetter(int minesNumber, Square[][] mineField) {
+        int fieldElements = fieldInstance.getHigh() * fieldInstance.getWidth();
         Random rand = new Random();
         while (minesNumber > 0) {
             for (int iteration = 0; iteration < fieldElements && minesNumber > 0; iteration++) {
-                int i = rand.nextInt(instance.getHigh());
-                int j = rand.nextInt(instance.getWidth());
+                int i = rand.nextInt(fieldInstance.getHigh());
+                int j = rand.nextInt(fieldInstance.getWidth());
                 if (mineField[i][j].isMine()) continue;
                 if (minesPerRow[i] == maxMinePerRow) continue;
 
@@ -71,13 +85,13 @@ public class MineFieldLoader {
         MineField.print(mineField);
     }
 
-    private static boolean getRandomMine(int minesNumer) {
+    private boolean getRandomMine(int minesNumer) {
         if (minesNumer == 0) return false;
         double mark = 1.0 / 2;
         return ((Math.random()) > mark) ? false : true;
     }
 
-    private static void inicializeAdjacentMinesValue(Square[][] mineField) {
+    private void inicializeAdjacentMinesValue(Square[][] mineField) {
         for (int i = 0; i <= (mineField.length - 1); i++) {
             for (int j = 0; j <= (mineField[i].length - 1); j++) {
 
@@ -100,7 +114,7 @@ public class MineFieldLoader {
         }
     }
 
-    private static void compareWithRow(int actualI, int actualJ, Square[][] mineField, boolean previousRow) {
+    private void compareWithRow(int actualI, int actualJ, Square[][] mineField, boolean previousRow) {
         int startJ, stopJ;
         int rowI = (previousRow) ? (actualI - 1) : (actualI + 1);
         if (actualJ == (mineField[actualI].length - 1)) {
@@ -116,7 +130,7 @@ public class MineFieldLoader {
         }
     }
 
-    private static void compareWithActualRow(int actualI, int actualJ, Square[][] mineField) {
+    private void compareWithActualRow(int actualI, int actualJ, Square[][] mineField) {
         if (actualJ == mineField[actualI].length - 1) {
             compareElements(actualI, actualJ, actualI, (actualJ - 1), mineField);
         } else {
@@ -134,7 +148,7 @@ public class MineFieldLoader {
         }
     }
 
-    private static void compareElements(int actualI, int actualJ, int rowI, int columnJ, Square[][] mineField) {
+    private void compareElements(int actualI, int actualJ, int rowI, int columnJ, Square[][] mineField) {
         if (mineField[rowI][columnJ].isMine()) {
             mineField[actualI][actualJ].setAdjacentMines(
                     (mineField[actualI][actualJ].getAdjacentMines() + 1));
