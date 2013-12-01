@@ -19,20 +19,18 @@ public class MineFieldViewer extends JPanel {
                 matrix[i][j] = new MineFieldButton(i, j, mineField.getMineField()[i][j]);
             }
         }
-        this.loadMineField();
 
-    }
-
-    private void gameOver() {
-        System.out.println("FIN DEL JUEGO");
-    }
-
-    private void loadMineField() {
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[i].length; j++) {
                 this.add(matrix[i][j]);
             }
         }
+
+    }
+
+    public static void gameOver() {
+        GameOver gameOver = new GameOver();
+        gameOver.execute();
     }
 
     public static void reLoad(int posX, int posY) {
@@ -41,8 +39,8 @@ public class MineFieldViewer extends JPanel {
 
     private static int reLoadColumnButton(int posX, int posY, boolean stop) {
         if (posX < 0 || posX == matrix.length || stop == true) {
-            return 0;
-        }else{
+            return 1;
+        } else {
             stop = matrix[posX][posY].showValue();
             reLoadRowButton(posX, (posY - 1), stop);
             reLoadRowButton(posX, (posY + 1), stop);
@@ -54,9 +52,11 @@ public class MineFieldViewer extends JPanel {
 
     private static int reLoadRowButton(int posX, int posY, boolean stop) {
         if (posY < 0 || posY == matrix[0].length || stop == true) {
-            return 0;
-        }else{
+            return 1;
+        } else {
             stop = matrix[posX][posY].showValue();
+            reLoadColumnButton((posX - 1), posY, stop);
+            reLoadColumnButton((posX + 1), posY, stop);
             reLoadRowButton(posX, (posY - 1), stop);
             reLoadRowButton(posX, (posY + 1), stop);
             return 0;

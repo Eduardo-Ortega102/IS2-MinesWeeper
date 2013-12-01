@@ -21,43 +21,27 @@ public class MineFieldButton extends JButton {
         this.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                checkAction();
+                addActions();
             }
         });
     }
 
-    public int getPosX() {
-        return posX;
-    }
-
-    public int getPosY() {
-        return posY;
-    }
-
-    private void checkAction() {
+    private void addActions() {
         if (this.square.isMine()) {
-            gameOver();
+            MineFieldViewer.gameOver();
         } else {
             MineFieldViewer.reLoad(posX, posY);
         }
     }
-    
-    public boolean isNotMine(){
-        return (this.square.isMine())? false:true;
-    }
 
     public boolean showValue() {
-        if(this.isEnabled() == false)return true;
-        boolean value = false;
+        if (this.isEnabled() == false) return true;
+        this.setEnabled(false);
+
         if (this.square.getAdjacentMines() != 0) {
             this.setText(Integer.toString(square.getAdjacentMines()));
-            value = true;
+            return true;
         }
-        this.setEnabled(false);
-        return value;
-    }
-
-    private void gameOver() {
-        System.out.println("ARREGLA ESTE METODO");
+        return false;
     }
 }

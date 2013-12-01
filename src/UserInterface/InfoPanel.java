@@ -1,6 +1,9 @@
 package UserInterface;
 
+import Model.MineField;
 import java.awt.Color;
+import java.awt.PopupMenu;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class InfoPanel extends JPanel {
@@ -23,8 +26,16 @@ public class InfoPanel extends JPanel {
 
     private void inicializeMinesNumber() {
         minesNumber = new JPanel();
+        minesNumber.add(createLabel());
         minesNumber.setSize(80, 60);
         minesNumber.setBackground(Color.black);
+    }
+
+    private JLabel createLabel() {
+        JLabel label = new JLabel();
+        label.setText("Mines number: "+Integer.toString(MineField.getInstance().getMinesNumber()));
+        label.setForeground(Color.red);
+        return label;
     }
 
 }
