@@ -1,44 +1,27 @@
 package UserInterface;
 
-import Control.Command;
-import Model.Clock;
 import Model.MineField;
 import java.awt.*;
 import javax.swing.*;
 
 public class InfoPanel extends JPanel {
 
-    private JPanel playedTime;
     private JPanel minesNumber;
-    private JLabel playedLabel;
-    private static Clock clock;
+    private static SwingTimer playedTime;
 
     public InfoPanel() {
         inicializeMinesNumber();
-        inicializePlayedTime();
+        playedTime = new SwingTimer(1000);
         this.add(playedTime);
         this.add(minesNumber);
-        clock = new Clock(new Command<String>() {
-            @Override
-            public void executeCommand(String text) {
-                refreshText(text);
-            }
-        });
     }
     
     public static void start() {
-        clock.start();
+        playedTime.start();
     }
 
     public static void stop() {
-        clock.stop();
-    }
-
-    private void inicializePlayedTime() {
-        playedTime = new JPanel();
-        playedTime.setSize(80, 60);
-        playedTime.setBackground(Color.black);
-        playedTime.add(createTimeLabel());
+        playedTime.stop();
     }
 
     private void inicializeMinesNumber() {
@@ -55,14 +38,4 @@ public class InfoPanel extends JPanel {
         return label;
     }
 
-    private JLabel createTimeLabel() {
-        playedLabel = new JLabel();
-        refreshText("0");
-        playedLabel.setForeground(Color.red);
-        return playedLabel;
-    }
-
-    private void refreshText(String text) {
-        playedLabel.setText("Played Time: " + text);
-    }
 }
