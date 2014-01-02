@@ -1,13 +1,14 @@
 package UserInterface;
 
 import Control.Command;
+import UserInterface.AbstractInterface.WinnerInterface;
 import java.awt.*;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
-public class WinnerDialog extends JFrame{
+public class WinnerDialog extends JFrame implements WinnerInterface{
     private JButton exitButton;
     private JButton playAgainButton;
     private Command command;
@@ -47,7 +48,7 @@ public class WinnerDialog extends JFrame{
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                command.executeCommand(0);
+//                command.executeCommand(0);
             }
         });
     }
@@ -57,7 +58,7 @@ public class WinnerDialog extends JFrame{
         playAgainButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                command.executeCommand(3);
+//                command.executeCommand(3);
             }
         });
     }

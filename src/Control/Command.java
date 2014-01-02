@@ -1,6 +1,6 @@
 package Control;
 
-public interface Command<T> {
+public interface Command {
 
-    public void executeCommand(T parameters);
+    public void executeCommand();
 }

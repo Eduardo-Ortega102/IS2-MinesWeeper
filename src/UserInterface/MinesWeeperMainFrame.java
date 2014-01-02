@@ -1,19 +1,25 @@
 package UserInterface;
 
+import UserInterface.AbstractInterface.MinesWeeperInterface;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
-public class MinesWeeperMainFrame extends JFrame {
+public class MinesWeeperMainFrame extends JFrame implements MinesWeeperInterface{
 
-    public MinesWeeperMainFrame() throws HeadlessException {
+    private InfoPanel infoPanel;
+    private MineFieldPanel minesPanel;
+    
+    public MinesWeeperMainFrame(InfoPanel infoPanel, MineFieldPanel minesPanel) throws HeadlessException {
+        this.infoPanel = infoPanel;
+        this.minesPanel = minesPanel;
         this.setTitle("Minesweeper");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.add(createToolbar(), BorderLayout.NORTH);
     }
     
-    public void execute(InfoPanel infoPanel, MineFieldPanel minesPanel){
+    public void execute(){
         this.add(infoPanel, BorderLayout.SOUTH);
         this.add(minesPanel, BorderLayout.CENTER);
         this.pack();

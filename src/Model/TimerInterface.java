@@ -1,4 +1,4 @@
-package UserInterface.AbstractInterface;
+package Model;
 
 public interface TimerInterface {
 

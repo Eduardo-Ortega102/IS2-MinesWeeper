@@ -52,7 +52,7 @@ public class MineFieldPanel extends JPanel {
         showSquares(posX, posY, false);
         countDisableButtons();
         if ((squareNumber - count) == MineField.getInstance().getMinesNumber()) {
-            command.executeCommand(1);
+//            command.executeCommand(1);
         }
     }
 
@@ -71,7 +71,7 @@ public class MineFieldPanel extends JPanel {
     }
 
     public static void partIsOver() {
-        command.executeCommand(0);
+//        command.executeCommand(0);
     }
 
     private static void countDisableButtons() {

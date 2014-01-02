@@ -1,13 +1,14 @@
 package UserInterface;
 
 import Control.Command;
+import UserInterface.AbstractInterface.GameOverInterface;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
 
-public class GameOverDialog extends JFrame {
+public class GameOverDialog extends JFrame implements GameOverInterface{
 
     private JButton exitButton;
     private JButton playNewGameButton;
@@ -41,7 +42,7 @@ public class GameOverDialog extends JFrame {
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                command.executeCommand(0);
+//                command.executeCommand(0);
             }
         });
         return exitButton;
@@ -64,7 +65,7 @@ public class GameOverDialog extends JFrame {
         playNewGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                command.executeCommand(3);
+//                command.executeCommand(3);
             }
         });
         return playNewGameButton;
