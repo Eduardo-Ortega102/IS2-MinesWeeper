@@ -4,7 +4,6 @@ import Model.TimerInterface;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeListener;
 import javax.swing.*;
 
 public class SwingTimer extends JPanel implements TimerInterface {

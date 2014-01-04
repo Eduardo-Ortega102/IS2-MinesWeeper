@@ -1,30 +1,35 @@
 package UserInterface;
 
 import Model.MineField;
+import UserInterface.AbstractInterface.InfoPanel;
 import java.awt.*;
 import javax.swing.*;
 
-public class InfoPanel extends JPanel {
+public final class SwingInfoPanel extends JPanel implements InfoPanel{
 
     private JPanel minesNumber;
     private static SwingTimer playedTime;
 
-    public InfoPanel() {
-        inicializeMinesNumber();
+    public SwingInfoPanel() {
         playedTime = new SwingTimer(1000);
+        minesNumber = null;
         this.add(playedTime);
+        inicializeMinesNumber();
         this.add(minesNumber);
     }
-
-    public static void start() {
+    
+    @Override
+    public void startClock() {
         playedTime.start();
     }
 
-    public static void stop() {
+    @Override
+    public void stopClock() {
         playedTime.stop();
     }
 
-    public static void reset() {
+    @Override
+    public void resetClock() {
         playedTime.reset();
     }
 

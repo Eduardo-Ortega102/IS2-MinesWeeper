@@ -1,5 +1,7 @@
 package UserInterface;
 
+import UserInterface.AbstractInterface.InfoPanel;
+import UserInterface.AbstractInterface.InfoPanelFactory;
 import UserInterface.AbstractInterface.MineFieldViewer;
 import java.awt.*;
 import javax.swing.*;
@@ -8,10 +10,13 @@ public class MinesWeeperMainFrame extends JFrame {
 
     private InfoPanel infoPanel;
     private MineFieldViewer minesViewer;
-    private ActionListenerFactory factory;
+    private ActionListenerFactory actionListenerFactory;
+    private InfoPanelFactory infoFactory;
 
-    public MinesWeeperMainFrame(ActionListenerFactory factory) throws HeadlessException {
-        this.factory = factory;
+    public MinesWeeperMainFrame(ActionListenerFactory factory,
+            InfoPanelFactory infoFactory) throws HeadlessException {
+        this.actionListenerFactory = factory;
+        this.infoFactory = infoFactory;
         this.setTitle("Minesweeper");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.add(createToolbar(), BorderLayout.NORTH);
@@ -19,18 +24,30 @@ public class MinesWeeperMainFrame extends JFrame {
 
     public void setMinesViewer(MineFieldViewer minesViewer) {
         this.minesViewer = minesViewer;
+        this.remove((Component) minesViewer);
+    }
+
+    public InfoPanel getInfoPanel() {
+        return infoPanel;
     }
 
     public void execute() {
         if (this.infoPanel != null) {
-        this.remove(infoPanel);
+            this.remove((Component) infoPanel);
         }
-        this.infoPanel = new InfoPanel();
-        this.add(infoPanel, BorderLayout.SOUTH);
-        this.remove((Component) minesViewer);
+        this.infoPanel = infoFactory.createInfoPanel();
+        this.add((Component) infoPanel, BorderLayout.SOUTH);
         this.add((Component) minesViewer, BorderLayout.CENTER);
         this.pack();
+        this.setScreenLocation();
         this.setVisible(true);
+    }
+
+    private void setScreenLocation() {
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        this.setLocation(
+                (int) ((tk.getScreenSize().getWidth() - this.getWidth()) / 2),
+                (int) ((tk.getScreenSize().getHeight() - this.getHeight()) / 2));
     }
 
     private JPanel createToolbar() {
@@ -64,7 +81,7 @@ public class MinesWeeperMainFrame extends JFrame {
 
     private JMenuItem createItem(String action, String label) {
         JMenuItem item = new JMenuItem(label);
-        item.addActionListener(factory.createActionListener(action));
+        item.addActionListener(actionListenerFactory.createActionListener(action));
         return item;
     }
 }

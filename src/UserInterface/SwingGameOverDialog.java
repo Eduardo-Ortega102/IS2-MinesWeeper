@@ -3,7 +3,6 @@ package UserInterface;
 import UserInterface.AbstractInterface.GameOverDialog;
 import java.awt.*;
 import javax.swing.*;
-import static javax.swing.JFrame.EXIT_ON_CLOSE;
 
 public class SwingGameOverDialog extends JFrame implements GameOverDialog {
 
@@ -17,6 +16,14 @@ public class SwingGameOverDialog extends JFrame implements GameOverDialog {
         this.add(new JLabel("Game Over, better luck next time."), BorderLayout.CENTER);
         this.add(createButtonbar(), BorderLayout.SOUTH);
         this.pack();
+        this.setScreenLocation();
+    }
+
+    private void setScreenLocation() {
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        this.setLocation(
+                (int) ((tk.getScreenSize().getWidth() - this.getWidth()) / 2),
+                (int) ((tk.getScreenSize().getHeight() - this.getHeight()) / 2));
     }
 
     @Override

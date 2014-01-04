@@ -19,6 +19,14 @@ public final class SwingOptionDialog extends JFrame implements OptionDialog {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.createComponents();
         this.pack();
+        this.setScreenLocation();
+    }
+    
+    private void setScreenLocation() {
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        this.setLocation(
+                (int) ((tk.getScreenSize().getWidth() - this.getWidth()) / 2),
+                (int) ((tk.getScreenSize().getHeight() - this.getHeight()) / 2));
     }
 
     @Override
@@ -111,7 +119,7 @@ public final class SwingOptionDialog extends JFrame implements OptionDialog {
         personalizeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setParameters(-1, 0, 0, 0, true);
+                setParameters(-1, 9, 9, 10, true);
             }
         });
     }

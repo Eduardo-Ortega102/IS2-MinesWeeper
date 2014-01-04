@@ -16,9 +16,8 @@ public class RandomMineFieldLoader implements MineFieldLoader {
     }
 
     public static RandomMineFieldLoader getInstance() {
-        if (loaderInstance == null) {
+        if (loaderInstance == null) 
             loaderInstance = new RandomMineFieldLoader();
-        }
         return loaderInstance;
     }
 
@@ -75,12 +74,6 @@ public class RandomMineFieldLoader implements MineFieldLoader {
             }
             maxMinePerRow += 1;
         }
-
-        /**
-         * -------------------------------- ----------BORRAR LA SIGUIENTE
-         * INSTRUCCION --------------------------------
-         */
-        MineField.print(mineField);
     }
 
     private boolean getRandomMine(int minesNumer) {
@@ -123,9 +116,8 @@ public class RandomMineFieldLoader implements MineFieldLoader {
             stopJ = (actualJ + 1);
         }
 
-        for (int columnJ = startJ; columnJ <= stopJ; columnJ++) {
+        for (int columnJ = startJ; columnJ <= stopJ; columnJ++) 
             compareElements(actualI, actualJ, rowI, columnJ, mineField);
-        }
     }
 
     private void compareWithActualRow(int actualI, int actualJ, Square[][] mineField) {
@@ -147,9 +139,8 @@ public class RandomMineFieldLoader implements MineFieldLoader {
     }
 
     private void compareElements(int actualI, int actualJ, int rowI, int columnJ, Square[][] mineField) {
-        if (mineField[rowI][columnJ].isMine()) {
+        if (mineField[rowI][columnJ].isMine()) 
             mineField[actualI][actualJ].setAdjacentMines(
                     (mineField[actualI][actualJ].getAdjacentMines() + 1));
-        }
     }
 }

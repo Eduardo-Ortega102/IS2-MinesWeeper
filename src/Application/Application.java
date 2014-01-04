@@ -9,6 +9,8 @@ import UserInterface.AbstractInterface.Action;
 import UserInterface.AbstractInterface.ActionFactory;
 import UserInterface.AbstractInterface.GameOverDialog;
 import UserInterface.AbstractInterface.HelpDialog;
+import UserInterface.AbstractInterface.InfoPanel;
+import UserInterface.AbstractInterface.InfoPanelFactory;
 import UserInterface.AbstractInterface.MineFieldViewer;
 import UserInterface.AbstractInterface.MineViewer;
 import UserInterface.AbstractInterface.MineViewerFactory;
@@ -16,7 +18,7 @@ import UserInterface.AbstractInterface.OptionDialog;
 import UserInterface.AbstractInterface.WinnerDialog;
 import UserInterface.ActionListenerFactory;
 import UserInterface.ErrorDialog;
-import UserInterface.InfoPanel;
+import UserInterface.SwingInfoPanel;
 import UserInterface.MinesWeeperMainFrame;
 import UserInterface.SwingGameOverDialog;
 import UserInterface.SwingHelpDialog;
@@ -27,8 +29,6 @@ import UserInterface.SwingWinnerDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Application {
 
@@ -42,6 +42,7 @@ public class Application {
     private GameOverDialog overDialog;
     private HelpDialog helpDialog;
     private MinesWeeperMainFrame applicationFrame;
+    private int firstTime;
 
     public static void main(String[] args) {
         new Application().execute();
@@ -110,7 +111,16 @@ public class Application {
     }
 
     private void createApplicationFrame() {
-        applicationFrame = new MinesWeeperMainFrame(actionListenerFactory);
+        applicationFrame = new MinesWeeperMainFrame(actionListenerFactory, createInfoPanelFactory());
+    }
+
+    private InfoPanelFactory createInfoPanelFactory() {
+        return new InfoPanelFactory() {
+            @Override
+            public InfoPanel createInfoPanel() {
+                return new SwingInfoPanel();
+            }
+        };
     }
 
     private void createCommands() {
@@ -157,9 +167,10 @@ public class Application {
         commandMap.put("Restart", new Command() {
             @Override
             public void executeCommand() {
-                mineFieldViewer.restart();
                 overDialog.hidDialog();
-                InfoPanel.reset();
+                mineFieldViewer.restart();
+                applicationFrame.getInfoPanel().resetClock();
+                firstTime = 0;
             }
         });
 
@@ -179,7 +190,7 @@ public class Application {
             public void execute(int x, int y) {
                 if (winDialog == null) winDialog = createWinnerDialog();
                 winDialog.showDialog();
-                InfoPanel.stop();
+                applicationFrame.getInfoPanel().stopClock();
             }
         });
 
@@ -188,7 +199,7 @@ public class Application {
             public void execute(int x, int y) {
                 if (overDialog == null) overDialog = createOverDialog();
                 overDialog.showDialog();
-                InfoPanel.stop();
+                applicationFrame.getInfoPanel().stopClock();
             }
         });
 
@@ -196,12 +207,14 @@ public class Application {
             @Override
             public void execute(int x, int y) {
                 mineFieldViewer.reLoad(x, y);
-                InfoPanel.reset();
+                if (firstTime == 0) applicationFrame.getInfoPanel().startClock();
+                firstTime = 1;
             }
         });
     }
 
     private void runApplication() {
+        firstTime = 0;
         try {
             loader.buildMineField(optionDialog.getRowsAmount(),
                     optionDialog.getColumnAmount(),

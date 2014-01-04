@@ -1,8 +1,8 @@
 package UserInterface;
 
 import UserInterface.AbstractInterface.MineViewer;
-import Model.Square;
 import UserInterface.AbstractInterface.ActionFactory;
+import Model.Square;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
@@ -50,7 +50,7 @@ public class SwingMineViewer extends JButton implements MineViewer {
 
     @Override
     public boolean isShowed() {
-        return this.isEnabled();
+        return !this.isEnabled();
     }
 
     @Override

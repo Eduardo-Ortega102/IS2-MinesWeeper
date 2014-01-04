@@ -1,10 +1,10 @@
 package UserInterface;
 
 import UserInterface.AbstractInterface.MineFieldViewer;
-import Model.MineField;
 import UserInterface.AbstractInterface.ActionFactory;
 import UserInterface.AbstractInterface.MineViewer;
 import UserInterface.AbstractInterface.MineViewerFactory;
+import Model.MineField;
 import java.awt.*;
 import javax.swing.*;
 
@@ -15,7 +15,6 @@ public final class SwingMineFieldViewer extends JPanel implements MineFieldViewe
     private ActionFactory actionFactory;
     private int squareNumber;
     private int count;
-    private int firstTime;
 
     public SwingMineFieldViewer(MineViewerFactory viewerFactory, ActionFactory actionFactory) {
         this.mineViewerFactory = viewerFactory;
@@ -26,7 +25,6 @@ public final class SwingMineFieldViewer extends JPanel implements MineFieldViewe
     public void load(MineField mineField) {
         if (matrix != null) clearViewer();
         matrix = new MineViewer[mineField.getHigh()][mineField.getWidth()];
-        firstTime = 0;
         squareNumber = mineField.getHigh() * mineField.getWidth();
         this.setLayout(new GridLayout(mineField.getHigh(), mineField.getWidth()));
         this.createMatrix(mineField);
@@ -50,15 +48,9 @@ public final class SwingMineFieldViewer extends JPanel implements MineFieldViewe
                 this.add((Component) matrix[i][j]);
     }
 
-    private void reset() {
-        count = 0;
-        firstTime = 0;
-        InfoPanel.reset();
-    }
-
     @Override
     public void restart() {
-        reset();
+        count = 0;
         for (int i = 0; i < matrix.length; i++)
             for (int j = 0; j < matrix[i].length; j++)
                 matrix[i][j].reset();
@@ -66,13 +58,10 @@ public final class SwingMineFieldViewer extends JPanel implements MineFieldViewe
 
     @Override
     public void reLoad(int posX, int posY) {
-        if (firstTime == 0) InfoPanel.start();
-        firstTime = 1;
         showSquares(posX, posY, false);
-        countDisableButtons();
-        if ((squareNumber - count) == MineField.getInstance().getMinesNumber()) {
+        countExecutedViewers();
+        if ((squareNumber - count) == MineField.getInstance().getMinesNumber()) 
             this.actionFactory.getAction("Winner").execute(0, 0);
-        }
     }
 
     private int showSquares(int posX, int posY, boolean stop) {
@@ -89,10 +78,10 @@ public final class SwingMineFieldViewer extends JPanel implements MineFieldViewe
         return 0;
     }
 
-    private void countDisableButtons() {
+    private void countExecutedViewers() {
         count = 0;
         for (int i = 0; i < matrix.length; i++)
             for (int j = 0; j < matrix[i].length; j++)
-                if (!matrix[i][j].isShowed()) count++;
+                if (matrix[i][j].isShowed()) count++;
     }
 }

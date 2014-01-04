@@ -17,6 +17,14 @@ public class SwingWinnerDialog extends JFrame implements WinnerDialog {
         this.add(createPanel(), BorderLayout.CENTER);
         this.add(createButtonbar(), BorderLayout.SOUTH);
         this.pack();
+        this.setScreenLocation();
+    }
+
+    private void setScreenLocation() {
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        this.setLocation(
+                (int) ((tk.getScreenSize().getWidth() - this.getWidth()) / 2),
+                (int) ((tk.getScreenSize().getHeight() - this.getHeight()) / 2));
     }
 
     @Override
