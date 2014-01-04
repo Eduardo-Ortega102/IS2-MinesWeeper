@@ -1,18 +1,22 @@
 package UserInterface;
 
+import UserInterface.AbstractInterface.MineViewer;
 import Model.Square;
+import UserInterface.AbstractInterface.ActionFactory;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
-public class MineButton extends JButton {
+public class SwingMineViewer extends JButton implements MineViewer {
 
     private int posX;
     private int posY;
     private final Square square;
+    private final ActionFactory factory;
 
-    public MineButton(int posX, int posY, Square square) {
+    public SwingMineViewer(int posX, int posY, Square square, ActionFactory factory) {
         super("   ");
+        this.factory = factory;
         this.posX = posX;
         this.posY = posY;
         this.square = square;
@@ -24,15 +28,15 @@ public class MineButton extends JButton {
             }
         });
     }
-
     private void addActions() {
         if (this.square.isMine()) {
-            MineFieldPanel.partIsOver();
+            factory.getAction("partIsOver").execute(0, 0);
         } else {
-            MineFieldPanel.reLoad(posX, posY);
+            factory.getAction("reLoad").execute(posX, posY);
         }
     }
 
+    @Override
     public boolean showValue() {
         if (this.isEnabled() == false) return true;
         this.setEnabled(false);
@@ -43,5 +47,15 @@ public class MineButton extends JButton {
         }
         return false;
     }
-    
+
+    @Override
+    public boolean isShowed() {
+        return this.isEnabled();
+    }
+
+    @Override
+    public void reset() {
+        this.setText("");
+        this.setEnabled(true);
+    }
 }

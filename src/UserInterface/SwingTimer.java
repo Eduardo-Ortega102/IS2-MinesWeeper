@@ -30,7 +30,7 @@ public class SwingTimer extends JPanel implements TimerInterface {
         });
         this.add(label);
     }
-    
+
     @Override
     public void start() {
         timer.start();
@@ -45,6 +45,7 @@ public class SwingTimer extends JPanel implements TimerInterface {
     public void reset() {
         minutes = 0;
         seconds = 0;
+        refreshLabel("00:00");
     }
 
     private String analizeTime() {

@@ -1,27 +1,33 @@
 package UserInterface;
 
-import UserInterface.AbstractInterface.MinesWeeperInterface;
+import UserInterface.AbstractInterface.MineFieldViewer;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.*;
 
-public class MinesWeeperMainFrame extends JFrame implements MinesWeeperInterface{
+public class MinesWeeperMainFrame extends JFrame {
 
     private InfoPanel infoPanel;
-    private MineFieldPanel minesPanel;
-    
-    public MinesWeeperMainFrame(InfoPanel infoPanel, MineFieldPanel minesPanel) throws HeadlessException {
-        this.infoPanel = infoPanel;
-        this.minesPanel = minesPanel;
+    private MineFieldViewer minesViewer;
+    private ActionListenerFactory factory;
+
+    public MinesWeeperMainFrame(ActionListenerFactory factory) throws HeadlessException {
+        this.factory = factory;
         this.setTitle("Minesweeper");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.add(createToolbar(), BorderLayout.NORTH);
     }
-    
-    public void execute(){
-        this.add(infoPanel, BorderLayout.SOUTH);
-        this.add(minesPanel, BorderLayout.CENTER);
+
+    public void setMinesViewer(MineFieldViewer minesViewer) {
+        this.minesViewer = minesViewer;
+    }
+
+    public void execute() {
+        if (this.infoPanel == null) {
+            this.infoPanel = new InfoPanel();
+            this.add(infoPanel, BorderLayout.SOUTH);
+        }
+        this.remove((Component) minesViewer);
+        this.add((Component) minesViewer, BorderLayout.CENTER);
         this.pack();
         this.setVisible(true);
     }
@@ -43,9 +49,9 @@ public class MinesWeeperMainFrame extends JFrame implements MinesWeeperInterface
 
     private JMenu createGameMenu() {
         JMenu game = new JMenu("Game");
-        game.add(createNewGameItem());
-        game.add(createOptionsItem());
-        game.add(createExitItem());
+        game.add(createItem("NewGame", "New Game"));
+        game.add(createItem("Options", "Options"));
+        game.add(createItem("Exit", "Exit"));
         return game;
     }
 
@@ -55,33 +61,14 @@ public class MinesWeeperMainFrame extends JFrame implements MinesWeeperInterface
         return help;
     }
 
-    private JMenuItem createNewGameItem() {
-        JMenuItem item = new JMenuItem("New Game");
-        return item;
-    }
-
-    private JMenuItem createOptionsItem() {
-        JMenuItem item = new JMenuItem("Options");
-        return item;
-    }
-
-    private JMenuItem createExitItem() {
-        JMenuItem item = new JMenuItem("Exit");
-        item.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                kill();
-            }
-        });
-        return item;
-    }
-
     private JMenuItem createHowToPlayItem() {
         JMenuItem item = new JMenuItem("How to play");
         return item;
     }
 
-    public void kill() {
-        dispose();
+    private JMenuItem createItem(String action, String label) {
+        JMenuItem item = new JMenuItem(label);
+        item.addActionListener(factory.createActionListener(action));
+        return item;
     }
 }

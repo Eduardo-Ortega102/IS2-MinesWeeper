@@ -1,36 +1,29 @@
 package UserInterface;
 
-import UserInterface.AbstractInterface.OptionInterface;
+import UserInterface.AbstractInterface.OptionDialog;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
-public class OptionDialog extends JFrame implements OptionInterface {
+public final class SwingOptionDialog extends JFrame implements OptionDialog {
 
     private ActionListenerFactory factory;
     private JRadioButton personalizeButton;
     private JRadioButton[] defaultOptionButtons;
     private JTextField[] optionTextFields;
-    private int rowsAmount;
-    private int columnAmount;
-    private int minesAmount;
 
-    public OptionDialog(ActionListenerFactory factory) throws HeadlessException {
+    public SwingOptionDialog(ActionListenerFactory factory) throws HeadlessException {
         super("Options");
         this.factory = factory;
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.createComponents();
         this.pack();
-        this.setVisible(true);
-        this.defaultOptionButtons[0].doClick();
     }
 
+    @Override
     public void execute() {
         this.setVisible(true);
-//        this.easyButton.doClick();
         this.defaultOptionButtons[0].doClick();
     }
 
@@ -104,38 +97,12 @@ public class OptionDialog extends JFrame implements OptionInterface {
     }
 
     private JTextField[] createTextFields() {
-        return new JTextField[]{createTextField(10, 'r'), createTextField(10, 'c'), createTextField(10, 'm')};
+        return new JTextField[]{createTextField(10), createTextField(10), createTextField(10)};
     }
 
-    private JTextField createTextField(int length, final char attribute) {
+    private JTextField createTextField(int length) {
         final JTextField field = new JTextField(length);
         field.setEnabled(false);
-        field.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                switch (attribute) {
-                    case 'r':
-                        rowsAmount = Integer.parseInt(field.getText());
-                        System.out.println("filas: " + rowsAmount);
-                        break;
-                    case 'c':
-                        columnAmount = Integer.parseInt(field.getText());
-                        System.out.println("column: " + columnAmount);
-                        break;
-                    default:
-                        minesAmount = Integer.parseInt(field.getText());
-                        System.out.println("minas: " + minesAmount);
-                }
-            }
-        });
         return field;
     }
 
@@ -161,35 +128,37 @@ public class OptionDialog extends JFrame implements OptionInterface {
         enableOptionFields(optionFieldsMode);
         for (int i = 0; i < this.defaultOptionButtons.length; i++)
             if (i != index) this.defaultOptionButtons[i].setSelected(false);
-        this.rowsAmount = rows;
-        this.columnAmount = columns;
-        this.minesAmount = mines;
-        System.out.println("rows: " + rowsAmount + "    " + "colum: " + columnAmount + "    " + "mines: " + minesAmount);
+        this.optionTextFields[0].setText(Integer.toString(rows));
+        this.optionTextFields[1].setText(Integer.toString(columns));
+        this.optionTextFields[2].setText(Integer.toString(mines));
+        System.out.println("rows: " + this.optionTextFields[0].getText()
+                + "    " + "colum: " + this.optionTextFields[1].getText()
+                + "    " + "mines: " + this.optionTextFields[2].getText());
     }
 
     private void enableOptionFields(boolean mode) {
         for (JTextField jTextField : this.optionTextFields)
             jTextField.setEnabled(mode);
-        if (mode == false) clearOptionFields();
     }
 
-    private void clearOptionFields() {
-        for (JTextField jTextField : this.optionTextFields)
-            jTextField.setText("");
+    @Override
+    public void reset() {
+        this.setVisible(false);
+        this.defaultOptionButtons[0].setSelected(false);
     }
 
     @Override
     public int getRowsAmount() {
-        return this.rowsAmount;
+        return Integer.parseInt(this.optionTextFields[0].getText());
     }
 
     @Override
     public int getColumnAmount() {
-        return this.columnAmount;
+        return Integer.parseInt(this.optionTextFields[1].getText());
     }
 
     @Override
     public int getMinesAmount() {
-        return this.minesAmount;
+        return Integer.parseInt(this.optionTextFields[2].getText());
     }
 }

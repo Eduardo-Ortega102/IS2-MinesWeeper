@@ -15,13 +15,17 @@ public class InfoPanel extends JPanel {
         this.add(playedTime);
         this.add(minesNumber);
     }
-    
+
     public static void start() {
         playedTime.start();
     }
 
     public static void stop() {
         playedTime.stop();
+    }
+
+    public static void reset() {
+        playedTime.reset();
     }
 
     private void inicializeMinesNumber() {
@@ -37,5 +41,4 @@ public class InfoPanel extends JPanel {
         label.setForeground(Color.red);
         return label;
     }
-
 }

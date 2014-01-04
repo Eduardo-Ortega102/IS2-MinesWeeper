@@ -1,6 +1,10 @@
 package UserInterface.AbstractInterface;
 
-public interface OptionInterface {
+public interface OptionDialog {
+    
+    public void execute();
+    
+    public void reset();
 
     public int getRowsAmount();
 
