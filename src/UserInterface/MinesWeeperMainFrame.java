@@ -22,10 +22,11 @@ public class MinesWeeperMainFrame extends JFrame {
     }
 
     public void execute() {
-        if (this.infoPanel == null) {
-            this.infoPanel = new InfoPanel();
-            this.add(infoPanel, BorderLayout.SOUTH);
+        if (this.infoPanel != null) {
+        this.remove(infoPanel);
         }
+        this.infoPanel = new InfoPanel();
+        this.add(infoPanel, BorderLayout.SOUTH);
         this.remove((Component) minesViewer);
         this.add((Component) minesViewer, BorderLayout.CENTER);
         this.pack();
@@ -57,13 +58,8 @@ public class MinesWeeperMainFrame extends JFrame {
 
     private JMenu createHelpMenu() {
         JMenu help = new JMenu("Help");
-        help.add(createHowToPlayItem());
+        help.add(createItem("Help", "How to play"));
         return help;
-    }
-
-    private JMenuItem createHowToPlayItem() {
-        JMenuItem item = new JMenuItem("How to play");
-        return item;
     }
 
     private JMenuItem createItem(String action, String label) {

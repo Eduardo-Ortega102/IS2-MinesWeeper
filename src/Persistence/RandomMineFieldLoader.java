@@ -4,7 +4,7 @@ import Model.MineField;
 import Model.Square;
 import java.util.Random;
 
-public class RandomMineFieldLoader implements MineFieldLoader{
+public class RandomMineFieldLoader implements MineFieldLoader {
 
     private static MineField fieldInstance;
     private static RandomMineFieldLoader loaderInstance;
@@ -12,6 +12,7 @@ public class RandomMineFieldLoader implements MineFieldLoader{
     private static int maxMinePerRow;
 
     private RandomMineFieldLoader() {
+        maxMinePerRow = 1;
     }
 
     public static RandomMineFieldLoader getInstance() {
@@ -21,18 +22,26 @@ public class RandomMineFieldLoader implements MineFieldLoader{
         return loaderInstance;
     }
 
-    @Override
-    public void buildMineField(int high, int width, int minesNumber, final int X) throws Exception{
-            MineField.createInstance(high, width, minesNumber);
-            fieldInstance = MineField.getInstance();
-            maxMinePerRow = X;
-            inicializeMinesPerRow(fieldInstance.getHigh());
-            createMineField(fieldInstance.getMineField());
-            mineFieldSetter(minesNumber, fieldInstance.getMineField());
-            inicializeAdjacentMinesValue(fieldInstance.getMineField());
+    private boolean checkParameters(int high, int width, int minesNumber) {
+        if(high < 9) return false;
+        if(width < 9) return false;
+        if(minesNumber < 10) return false;
+        return true;
+    }
 
-            System.out.println("CAMPO RESULTANTE: ");
-            MineField.print(fieldInstance.getMineField());
+    @Override
+    public void buildMineField(int high, int width, int minesNumber) throws Exception {
+        if (!checkParameters(high, width, minesNumber))
+            throw new Exception("Parámetros Incorrectos");
+        MineField.createInstance(high, width, minesNumber);
+        fieldInstance = MineField.getInstance();
+        inicializeMinesPerRow(fieldInstance.getHigh());
+        createMineField(fieldInstance.getMineField());
+        mineFieldSetter(minesNumber, fieldInstance.getMineField());
+        inicializeAdjacentMinesValue(fieldInstance.getMineField());
+
+        System.out.println("CAMPO RESULTANTE: ");
+        MineField.print(fieldInstance.getMineField());
     }
 
     private void inicializeMinesPerRow(int high) {
@@ -43,8 +52,8 @@ public class RandomMineFieldLoader implements MineFieldLoader{
     }
 
     private void createMineField(Square[][] mineField) {
-        for (int i = 0; i < mineField.length; i++) 
-            for (int j = 0; j < mineField[i].length; j++) 
+        for (int i = 0; i < mineField.length; i++)
+            for (int j = 0; j < mineField[i].length; j++)
                 mineField[i][j] = new Square(false);
     }
 
@@ -66,11 +75,10 @@ public class RandomMineFieldLoader implements MineFieldLoader{
             }
             maxMinePerRow += 1;
         }
-        
+
         /**
-         * --------------------------------
-         * ----------BORRAR LA SIGUIENTE INSTRUCCION
-         * --------------------------------
+         * -------------------------------- ----------BORRAR LA SIGUIENTE
+         * INSTRUCCION --------------------------------
          */
         MineField.print(mineField);
     }
