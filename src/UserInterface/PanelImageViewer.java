@@ -16,8 +16,8 @@ public class PanelImageViewer extends JPanel implements ImageViewer{
     }
     
     @Override
-    public void setImage(String name){
-        this.image = ImageSet.getInstance().get(name);
+    public void setImage(Image image){
+        this.image = image;
         this.setPreferredSize(new Dimension(
                 ((java.awt.Image)(image.getBitmap().getImage())).getWidth(null),
                 ((java.awt.Image)(image.getBitmap().getImage())).getHeight(null)));
@@ -26,6 +26,7 @@ public class PanelImageViewer extends JPanel implements ImageViewer{
 
     @Override
     public void paint(Graphics g) {
+        clearPanel(g);
         g.drawImage((java.awt.Image)(image.getBitmap().getImage()), 0, 0, null);
     }
 

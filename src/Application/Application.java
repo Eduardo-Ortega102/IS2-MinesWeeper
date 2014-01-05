@@ -1,7 +1,9 @@
 package Application;
 
 import Control.Command;
+import Control.ImagePriority;
 import Control.ImageViewerControl;
+import Control.ImageViewerControlFactory;
 import Model.Bitmap;
 import Model.MineField;
 import Model.Square;
@@ -52,6 +54,7 @@ public class Application {
     private GameOverDialog overDialog;
     private HelpDialog helpDialog;
     private MinesWeeperMainFrame applicationFrame;
+    private ImageViewerControlFactory imageViewerControlFactory;
     private int firstTime;
 
     public static void main(String[] args) {
@@ -68,10 +71,33 @@ public class Application {
         mineFieldViewer = createMineFieldViewer();
         ImageViewer viewer = createImageViewer();
         createApplicationFrame(viewer);
-        imageViewerControl = new ImageViewerControl(applicationFrame.getInfoPanel().getImageViewer());
+        imageViewerControlFactory = createImageViewerControlFactory();
+        imageViewerControl = createImageViewerControl(viewer);
         createCommands();
         createActions();
         optionDialog.execute();
+    }
+
+    private ImageViewerControlFactory createImageViewerControlFactory() {
+        return new ImageViewerControlFactory<String>() {
+            @Override
+            public ImageViewerControl<String> createImageViewerControl(ImageViewer viewer) {
+                return new ImageViewerControl(viewer, createHashMap());
+            }
+
+            private HashMap<String, ImagePriority> createHashMap() {
+                final HashMap<String, ImagePriority> priority = new HashMap<>();
+                priority.put("winnerIcon.jpg", ImagePriority.HIGH);
+                priority.put("loserIcon.jpg", ImagePriority.HIGH);
+                priority.put("waitIcon.jpg", ImagePriority.LOW);
+                priority.put("moveIcon.jpg", ImagePriority.LOW);
+                return priority;
+            }
+        };
+    }
+
+    private ImageViewerControl createImageViewerControl(ImageViewer viewer) {
+        return imageViewerControlFactory.createImageViewerControl(viewer);
     }
 
     private ImageSetLoader createImageSetLoader() {
@@ -204,6 +230,7 @@ public class Application {
             public void executeCommand() {
                 overDialog.hidDialog();
                 mineFieldViewer.restart();
+                imageViewerControl.reset();
                 imageViewerControl.viewImage("waitIcon.jpg");
                 applicationFrame.getInfoPanel().resetClock();
                 firstTime = 0;
@@ -236,8 +263,22 @@ public class Application {
             public void execute(int x, int y) {
                 if (overDialog == null) overDialog = createOverDialog();
                 overDialog.showDialog();
-                imageViewerControl.viewImage("loserIcon.jpg");
                 applicationFrame.getInfoPanel().stopClock();
+                imageViewerControl.viewImage("loserIcon.jpg");
+            }
+        });
+
+        actionMap.put("MineViewerSelected", new UserInterface.AbstractInterface.Action() {
+            @Override
+            public void execute(int x, int y) {
+                imageViewerControl.viewImage("moveIcon.jpg");
+            }
+        });
+
+        actionMap.put("MineViewerUnselected", new UserInterface.AbstractInterface.Action() {
+            @Override
+            public void execute(int x, int y) {
+                imageViewerControl.viewImage("waitIcon.jpg");
             }
         });
 
@@ -253,6 +294,7 @@ public class Application {
     }
 
     private void runApplication() {
+        imageViewerControl.reset();
         imageViewerControl.viewImage("waitIcon.jpg");
         firstTime = 0;
         try {
