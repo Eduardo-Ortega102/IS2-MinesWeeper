@@ -23,9 +23,9 @@ public class RandomMineFieldLoader implements MineFieldLoader {
     }
 
     private boolean checkParameters(int high, int width, int minesNumber) {
-        if(high < 9) return false;
-        if(width < 9) return false;
-        if(minesNumber < 10 || minesNumber >= high*width) return false;
+        if(high < 9 || high > 24) return false;
+        if(width < 9 || width > 30) return false;
+        if(minesNumber < 10 || minesNumber >= high*width || minesNumber > 668) return false;
         return true;
     }
 
