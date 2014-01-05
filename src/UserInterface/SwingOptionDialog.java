@@ -21,18 +21,12 @@ public final class SwingOptionDialog extends JFrame implements OptionDialog {
         this.pack();
         this.setScreenLocation();
     }
-    
+
     private void setScreenLocation() {
         Toolkit tk = Toolkit.getDefaultToolkit();
         this.setLocation(
                 (int) ((tk.getScreenSize().getWidth() - this.getWidth()) / 2),
                 (int) ((tk.getScreenSize().getHeight() - this.getHeight()) / 2));
-    }
-
-    @Override
-    public void execute() {
-        this.setVisible(true);
-        this.defaultOptionButtons[0].doClick();
     }
 
     private void createComponents() {
@@ -147,23 +141,31 @@ public final class SwingOptionDialog extends JFrame implements OptionDialog {
     }
 
     @Override
+    public void execute() {
+        this.setVisible(true);
+        this.defaultOptionButtons[0].doClick();
+    }
+
+    @Override
     public void reset() {
         this.setVisible(false);
-        this.defaultOptionButtons[0].setSelected(false);
     }
 
     @Override
     public int getRowsAmount() {
+        if(this.optionTextFields[0].getText().equals("")) return 0;
         return Integer.parseInt(this.optionTextFields[0].getText());
     }
 
     @Override
     public int getColumnAmount() {
+        if(this.optionTextFields[1].getText().equals("")) return 0;
         return Integer.parseInt(this.optionTextFields[1].getText());
     }
 
     @Override
     public int getMinesAmount() {
+        if(this.optionTextFields[2].getText().equals("")) return 0;
         return Integer.parseInt(this.optionTextFields[2].getText());
     }
 }

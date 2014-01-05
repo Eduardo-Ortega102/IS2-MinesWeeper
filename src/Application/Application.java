@@ -8,6 +8,7 @@ import Model.Bitmap;
 import Model.MineField;
 import Model.Square;
 import Persistence.FileImageSetLoader;
+import Persistence.MineFieldBuilderException;
 import Persistence.RandomMineFieldLoader;
 import Persistence.abstractInterface.BitmapFactory;
 import Persistence.abstractInterface.ImageSetLoader;
@@ -37,30 +38,26 @@ import UserInterface.SwingOptionDialog;
 import UserInterface.SwingWinnerDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Application {
 
     private HashMap<String, Command> commandMap;
-    private HashMap<String, UserInterface.AbstractInterface.Action> actionMap;
+    private HashMap<String, Action> actionMap;
     private ActionListenerFactory actionListenerFactory;
     private MineFieldLoader mineFieldLoader;
     private MineFieldViewer mineFieldViewer;
     private OptionDialog optionDialog;
     private WinnerDialog winDialog;
     private GameOverDialog overDialog;
-    private HelpDialog helpDialog;
     private MinesWeeperMainFrame applicationFrame;
     private ImageViewerControlFactory imageViewerControlFactory;
-    private int firstTime;
+    private ImageViewerControl imageViewerControl;
+    private boolean firstTime;
 
     public static void main(String[] args) {
         new Application().execute();
     }
-    private ImageViewerControl imageViewerControl;
 
     private void execute() {
         ImageSetLoader imageSetLoader = createImageSetLoader();
@@ -176,12 +173,7 @@ public class Application {
     }
 
     private InfoPanel createInfoPanel(ImageViewer viewer) {
-        try {
-            return new SwingInfoPanel(viewer);
-        } catch (IOException ex) {
-            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+        return new SwingInfoPanel(viewer);
     }
 
     private void createCommands() {
@@ -220,8 +212,8 @@ public class Application {
         commandMap.put("Help", new Command() {
             @Override
             public void executeCommand() {
-                if (helpDialog == null) helpDialog = createHelpDialog();
-                helpDialog.showDialog();
+                HelpDialog helpD = createHelpDialog();
+                helpD.showDialog();
             }
         });
 
@@ -233,7 +225,7 @@ public class Application {
                 imageViewerControl.reset();
                 imageViewerControl.viewImage("waitIcon.jpg");
                 applicationFrame.getInfoPanel().resetClock();
-                firstTime = 0;
+                firstTime = true;
             }
         });
 
@@ -286,9 +278,10 @@ public class Application {
             @Override
             public void execute(int x, int y) {
                 mineFieldViewer.reLoad(x, y);
-                if (firstTime == 0)
+                if (firstTime) {
                     applicationFrame.getInfoPanel().startClock();
-                firstTime = 1;
+                    firstTime = false;
+                }
             }
         });
     }
@@ -296,7 +289,7 @@ public class Application {
     private void runApplication() {
         imageViewerControl.reset();
         imageViewerControl.viewImage("waitIcon.jpg");
-        firstTime = 0;
+        firstTime = true;
         try {
             mineFieldLoader.buildMineField(optionDialog.getRowsAmount(),
                     optionDialog.getColumnAmount(),
@@ -304,7 +297,7 @@ public class Application {
             mineFieldViewer.load(MineField.getInstance());
             applicationFrame.setMinesViewer(mineFieldViewer);
             applicationFrame.execute();
-        } catch (Exception ex) {
+        } catch (MineFieldBuilderException ex) {
             HelpDialog errorDialog = createErrorDialog(ex.getMessage());
             errorDialog.showDialog();
             optionDialog.execute();

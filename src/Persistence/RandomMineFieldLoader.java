@@ -30,9 +30,9 @@ public class RandomMineFieldLoader implements MineFieldLoader {
     }
 
     @Override
-    public void buildMineField(int high, int width, int minesNumber) throws Exception {
+    public void buildMineField(int high, int width, int minesNumber) throws MineFieldBuilderException {
         if (!checkParameters(high, width, minesNumber))
-            throw new Exception("Parámetros Incorrectos");
+            throw new MineFieldBuilderException();
         MineField.createInstance(high, width, minesNumber);
         fieldInstance = MineField.getInstance();
         inicializeMinesPerRow(fieldInstance.getHigh());

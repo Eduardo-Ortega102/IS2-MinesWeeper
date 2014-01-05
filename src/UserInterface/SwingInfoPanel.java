@@ -13,7 +13,7 @@ public final class SwingInfoPanel extends JPanel implements InfoPanel {
     private ImageViewer imageViewer;
     private static SwingTimer playedTime;
 
-    public SwingInfoPanel(ImageViewer viewer) throws IOException {
+    public SwingInfoPanel(ImageViewer viewer) {
         playedTime = new SwingTimer(1000);
         minesNumber = null;
         imageViewer = viewer;
