@@ -13,7 +13,7 @@ public class ImageViewerControl {
     public ImageViewerControl(ImageViewer imageViever, HashMap<String, ImagePriority> imagePriorityMap) {
         this.imageViever = imageViever;
         this.imagePriorityMap = imagePriorityMap;
-        this.lastImagePriority = ImagePriority.LOW;
+        this.reset();
     }
 
     public void reset() {
