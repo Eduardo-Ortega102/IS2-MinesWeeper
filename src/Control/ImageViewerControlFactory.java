@@ -2,7 +2,7 @@ package Control;
 
 import UserInterface.AbstractInterface.ImageViewer;
 
-public interface ImageViewerControlFactory<Parameter> {
+public interface ImageViewerControlFactory {
 
-    public ImageViewerControl<Parameter> createImageViewerControl(ImageViewer viewer);
+    public ImageViewerControl createImageViewerControl(ImageViewer viewer);
 }

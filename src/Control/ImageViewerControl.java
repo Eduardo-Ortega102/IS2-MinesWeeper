@@ -4,13 +4,13 @@ import Model.ImageSet;
 import UserInterface.AbstractInterface.ImageViewer;
 import java.util.HashMap;
 
-public class ImageViewerControl<Parameter> {
+public class ImageViewerControl {
 
     private final ImageViewer imageViever;
     private ImagePriority lastImagePriority;
-    private HashMap<Parameter, ImagePriority> imagePriorityMap;
+    private HashMap<String, ImagePriority> imagePriorityMap;
 
-    public ImageViewerControl(ImageViewer imageViever, HashMap<Parameter, ImagePriority> imagePriorityMap) {
+    public ImageViewerControl(ImageViewer imageViever, HashMap<String, ImagePriority> imagePriorityMap) {
         this.imageViever = imageViever;
         this.imagePriorityMap = imagePriorityMap;
         this.lastImagePriority = ImagePriority.LOW;
@@ -20,9 +20,9 @@ public class ImageViewerControl<Parameter> {
         lastImagePriority = ImagePriority.LOW;
     }
 
-    public void viewImage(Parameter input) {
+    public void viewImage(String input) {
         if (imagePriorityMap.get(input).compareTo(lastImagePriority) >= 0) {
-            this.imageViever.setImage(ImageSet.getInstance().get((String)input));
+            this.imageViever.setImage(ImageSet.getInstance().get(input));
             lastImagePriority = imagePriorityMap.get(input);
         }
     }

@@ -79,9 +79,9 @@ public class Application {
     }
 
     private ImageViewerControlFactory createImageViewerControlFactory() {
-        return new ImageViewerControlFactory<String>() {
+        return new ImageViewerControlFactory() {
             @Override
-            public ImageViewerControl<String> createImageViewerControl(ImageViewer viewer) {
+            public ImageViewerControl createImageViewerControl(ImageViewer viewer) {
                 return new ImageViewerControl(viewer, createHashMap());
             }
 
