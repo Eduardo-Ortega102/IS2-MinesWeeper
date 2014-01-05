@@ -1,6 +1,6 @@
 package UserInterface;
 
-import Model.TimerInterface;
+import Model.abstractInterface.TimerInterface;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

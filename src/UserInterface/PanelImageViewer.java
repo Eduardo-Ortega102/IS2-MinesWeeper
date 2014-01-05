@@ -1,7 +1,6 @@
 package UserInterface;
 
-import Model.Image;
-import Model.ImageSet;
+import Model.abstractInterface.Image;
 import UserInterface.AbstractInterface.ImageViewer;
 import java.awt.Dimension;
 import java.awt.Graphics;

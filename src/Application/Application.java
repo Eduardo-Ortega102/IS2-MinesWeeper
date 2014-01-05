@@ -4,7 +4,7 @@ import Control.Command;
 import Control.ImagePriority;
 import Control.ImageViewerControl;
 import Control.ImageViewerControlFactory;
-import Model.Bitmap;
+import Model.abstractInterface.Bitmap;
 import Model.MineField;
 import Model.Square;
 import Persistence.FileImageSetLoader;

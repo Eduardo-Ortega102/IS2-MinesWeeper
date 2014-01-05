@@ -1,6 +1,6 @@
 package Persistence.abstractInterface;
 
-import Model.Bitmap;
+import Model.abstractInterface.Bitmap;
 
 public interface BitmapFactory<Parameter> {
 

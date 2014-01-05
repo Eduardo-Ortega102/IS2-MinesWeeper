@@ -1,5 +1,6 @@
 package Model;
 
+import Model.abstractInterface.Image;
 import java.util.HashMap;
 
 public class ImageSet {

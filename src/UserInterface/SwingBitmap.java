@@ -1,6 +1,6 @@
 package UserInterface;
 
-import Model.Bitmap;
+import Model.abstractInterface.Bitmap;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;

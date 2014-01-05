@@ -4,7 +4,6 @@ import Model.MineField;
 import UserInterface.AbstractInterface.ImageViewer;
 import UserInterface.AbstractInterface.InfoPanel;
 import java.awt.*;
-import java.io.IOException;
 import javax.swing.*;
 
 public final class SwingInfoPanel extends JPanel implements InfoPanel {

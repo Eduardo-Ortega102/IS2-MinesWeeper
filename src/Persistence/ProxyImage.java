@@ -1,8 +1,8 @@
 package Persistence;
 
 import Persistence.abstractInterface.ImageLoader;
-import Model.Bitmap;
-import Model.Image;
+import Model.abstractInterface.Bitmap;
+import Model.abstractInterface.Image;
 
 public class ProxyImage implements Image {
 

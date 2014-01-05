@@ -1,6 +1,6 @@
 package Persistence.abstractInterface;
 
-import Model.Image;
+import Model.abstractInterface.Image;
 
 public interface ImageLoader {
 

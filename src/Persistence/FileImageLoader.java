@@ -1,6 +1,6 @@
 package Persistence;
 
-import Model.Image;
+import Model.abstractInterface.Image;
 import Model.RealImage;
 import Persistence.abstractInterface.ImageLoader;
 import Persistence.abstractInterface.BitmapFactory;

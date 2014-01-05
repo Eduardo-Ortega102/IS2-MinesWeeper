@@ -1,6 +1,6 @@
 package UserInterface.AbstractInterface;
 
-import Model.Image;
+import Model.abstractInterface.Image;
 
 public interface ImageViewer {
 
