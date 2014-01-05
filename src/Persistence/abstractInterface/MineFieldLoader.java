@@ -1,4 +1,4 @@
-package Persistence;
+package Persistence.abstractInterface;
 
 public interface MineFieldLoader {
 

@@ -1,23 +1,34 @@
 package UserInterface;
 
 import Model.MineField;
+import UserInterface.AbstractInterface.ImageViewer;
 import UserInterface.AbstractInterface.InfoPanel;
 import java.awt.*;
+import java.io.IOException;
 import javax.swing.*;
 
-public final class SwingInfoPanel extends JPanel implements InfoPanel{
+public final class SwingInfoPanel extends JPanel implements InfoPanel {
 
     private JPanel minesNumber;
+    private ImageViewer imageViewer;
     private static SwingTimer playedTime;
 
-    public SwingInfoPanel() {
+    public SwingInfoPanel(ImageViewer viewer) throws IOException {
         playedTime = new SwingTimer(1000);
         minesNumber = null;
+        imageViewer = viewer;
         this.add(playedTime);
+        this.add((Component) imageViewer);
+    }
+
+    @Override
+    public void refresh() {
+        if (minesNumber != null) this.remove(minesNumber);
+        this.resetClock();
         inicializeMinesNumber();
         this.add(minesNumber);
     }
-    
+
     @Override
     public void startClock() {
         playedTime.start();
@@ -45,5 +56,10 @@ public final class SwingInfoPanel extends JPanel implements InfoPanel{
         label.setText("Mines number: " + Integer.toString(MineField.getInstance().getMinesNumber()));
         label.setForeground(Color.red);
         return label;
+    }
+
+    @Override
+    public ImageViewer getImageViewer() {
+        return this.imageViewer;
     }
 }

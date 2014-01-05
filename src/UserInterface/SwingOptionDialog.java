@@ -139,9 +139,6 @@ public final class SwingOptionDialog extends JFrame implements OptionDialog {
         this.optionTextFields[0].setText(Integer.toString(rows));
         this.optionTextFields[1].setText(Integer.toString(columns));
         this.optionTextFields[2].setText(Integer.toString(mines));
-        System.out.println("rows: " + this.optionTextFields[0].getText()
-                + "    " + "colum: " + this.optionTextFields[1].getText()
-                + "    " + "mines: " + this.optionTextFields[2].getText());
     }
 
     private void enableOptionFields(boolean mode) {

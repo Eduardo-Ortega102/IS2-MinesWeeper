@@ -1,7 +1,6 @@
 package UserInterface;
 
 import UserInterface.AbstractInterface.InfoPanel;
-import UserInterface.AbstractInterface.InfoPanelFactory;
 import UserInterface.AbstractInterface.MineFieldViewer;
 import java.awt.*;
 import javax.swing.*;
@@ -11,15 +10,14 @@ public class MinesWeeperMainFrame extends JFrame {
     private InfoPanel infoPanel;
     private MineFieldViewer minesViewer;
     private ActionListenerFactory actionListenerFactory;
-    private InfoPanelFactory infoFactory;
 
-    public MinesWeeperMainFrame(ActionListenerFactory factory,
-            InfoPanelFactory infoFactory) throws HeadlessException {
+    public MinesWeeperMainFrame(ActionListenerFactory factory, InfoPanel infoPanel) throws HeadlessException {
         this.actionListenerFactory = factory;
-        this.infoFactory = infoFactory;
+        this.infoPanel = infoPanel;
         this.setTitle("Minesweeper");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.add(createToolbar(), BorderLayout.NORTH);
+        this.add((Component) infoPanel, BorderLayout.SOUTH);
     }
 
     public void setMinesViewer(MineFieldViewer minesViewer) {
@@ -32,11 +30,7 @@ public class MinesWeeperMainFrame extends JFrame {
     }
 
     public void execute() {
-        if (this.infoPanel != null) {
-            this.remove((Component) infoPanel);
-        }
-        this.infoPanel = infoFactory.createInfoPanel();
-        this.add((Component) infoPanel, BorderLayout.SOUTH);
+        this.infoPanel.refresh();
         this.add((Component) minesViewer, BorderLayout.CENTER);
         this.pack();
         this.setScreenLocation();

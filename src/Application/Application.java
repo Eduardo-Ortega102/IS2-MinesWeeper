@@ -1,16 +1,21 @@
 package Application;
 
 import Control.Command;
+import Control.ImageViewerControl;
+import Model.Bitmap;
 import Model.MineField;
 import Model.Square;
+import Persistence.FileImageSetLoader;
 import Persistence.RandomMineFieldLoader;
-import Persistence.MineFieldLoader;
+import Persistence.abstractInterface.BitmapFactory;
+import Persistence.abstractInterface.ImageSetLoader;
+import Persistence.abstractInterface.MineFieldLoader;
 import UserInterface.AbstractInterface.Action;
 import UserInterface.AbstractInterface.ActionFactory;
 import UserInterface.AbstractInterface.GameOverDialog;
 import UserInterface.AbstractInterface.HelpDialog;
+import UserInterface.AbstractInterface.ImageViewer;
 import UserInterface.AbstractInterface.InfoPanel;
-import UserInterface.AbstractInterface.InfoPanelFactory;
 import UserInterface.AbstractInterface.MineFieldViewer;
 import UserInterface.AbstractInterface.MineViewer;
 import UserInterface.AbstractInterface.MineViewerFactory;
@@ -20,6 +25,8 @@ import UserInterface.ActionListenerFactory;
 import UserInterface.ErrorDialog;
 import UserInterface.SwingInfoPanel;
 import UserInterface.MinesWeeperMainFrame;
+import UserInterface.PanelImageViewer;
+import UserInterface.SwingBitmap;
 import UserInterface.SwingGameOverDialog;
 import UserInterface.SwingHelpDialog;
 import UserInterface.SwingMineFieldViewer;
@@ -28,14 +35,17 @@ import UserInterface.SwingOptionDialog;
 import UserInterface.SwingWinnerDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Application {
 
     private HashMap<String, Command> commandMap;
     private HashMap<String, UserInterface.AbstractInterface.Action> actionMap;
     private ActionListenerFactory actionListenerFactory;
-    private MineFieldLoader loader;
+    private MineFieldLoader mineFieldLoader;
     private MineFieldViewer mineFieldViewer;
     private OptionDialog optionDialog;
     private WinnerDialog winDialog;
@@ -47,16 +57,37 @@ public class Application {
     public static void main(String[] args) {
         new Application().execute();
     }
+    private ImageViewerControl imageViewerControl;
 
     private void execute() {
-        loader = createLoader();
+        ImageSetLoader imageSetLoader = createImageSetLoader();
+        imageSetLoader.loadImageSet();
+        mineFieldLoader = createLoader();
         actionListenerFactory = createActionListenerFactory();
         optionDialog = createOptionDialog();
         mineFieldViewer = createMineFieldViewer();
-        createApplicationFrame();
+        ImageViewer viewer = createImageViewer();
+        createApplicationFrame(viewer);
+        imageViewerControl = new ImageViewerControl(applicationFrame.getInfoPanel().getImageViewer());
         createCommands();
         createActions();
         optionDialog.execute();
+    }
+
+    private ImageSetLoader createImageSetLoader() {
+        return new FileImageSetLoader(
+                "src\\Icons",
+                new String[]{"winnerIcon.jpg", "waitIcon.jpg", "moveIcon.jpg", "loserIcon.jpg"},
+                createBitmapFactory());
+    }
+
+    private BitmapFactory createBitmapFactory() {
+        return new BitmapFactory<String>() {
+            @Override
+            public Bitmap createBitmap(String input) {
+                return new SwingBitmap(input);
+            }
+        };
     }
 
     private MineFieldLoader createLoader() {
@@ -110,17 +141,21 @@ public class Application {
         };
     }
 
-    private void createApplicationFrame() {
-        applicationFrame = new MinesWeeperMainFrame(actionListenerFactory, createInfoPanelFactory());
+    private ImageViewer createImageViewer() {
+        return new PanelImageViewer();
     }
 
-    private InfoPanelFactory createInfoPanelFactory() {
-        return new InfoPanelFactory() {
-            @Override
-            public InfoPanel createInfoPanel() {
-                return new SwingInfoPanel();
-            }
-        };
+    private void createApplicationFrame(ImageViewer viewer) {
+        applicationFrame = new MinesWeeperMainFrame(actionListenerFactory, createInfoPanel(viewer));
+    }
+
+    private InfoPanel createInfoPanel(ImageViewer viewer) {
+        try {
+            return new SwingInfoPanel(viewer);
+        } catch (IOException ex) {
+            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     private void createCommands() {
@@ -169,6 +204,7 @@ public class Application {
             public void executeCommand() {
                 overDialog.hidDialog();
                 mineFieldViewer.restart();
+                imageViewerControl.viewImage("waitIcon.jpg");
                 applicationFrame.getInfoPanel().resetClock();
                 firstTime = 0;
             }
@@ -190,6 +226,7 @@ public class Application {
             public void execute(int x, int y) {
                 if (winDialog == null) winDialog = createWinnerDialog();
                 winDialog.showDialog();
+                imageViewerControl.viewImage("winnerIcon.jpg");
                 applicationFrame.getInfoPanel().stopClock();
             }
         });
@@ -199,6 +236,7 @@ public class Application {
             public void execute(int x, int y) {
                 if (overDialog == null) overDialog = createOverDialog();
                 overDialog.showDialog();
+                imageViewerControl.viewImage("loserIcon.jpg");
                 applicationFrame.getInfoPanel().stopClock();
             }
         });
@@ -207,16 +245,18 @@ public class Application {
             @Override
             public void execute(int x, int y) {
                 mineFieldViewer.reLoad(x, y);
-                if (firstTime == 0) applicationFrame.getInfoPanel().startClock();
+                if (firstTime == 0)
+                    applicationFrame.getInfoPanel().startClock();
                 firstTime = 1;
             }
         });
     }
 
     private void runApplication() {
+        imageViewerControl.viewImage("waitIcon.jpg");
         firstTime = 0;
         try {
-            loader.buildMineField(optionDialog.getRowsAmount(),
+            mineFieldLoader.buildMineField(optionDialog.getRowsAmount(),
                     optionDialog.getColumnAmount(),
                     optionDialog.getMinesAmount());
             mineFieldViewer.load(MineField.getInstance());
