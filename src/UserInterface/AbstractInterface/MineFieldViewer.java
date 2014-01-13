@@ -6,8 +6,7 @@ public interface MineFieldViewer {
 
     public void load(MineField mineField);
 
+    public void showField(int x, int y);
+
     public void restart();
-
-    public void reLoad(int x, int y);
-
 }

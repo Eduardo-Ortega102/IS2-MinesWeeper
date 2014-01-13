@@ -250,7 +250,7 @@ public class Application {
             }
         });
 
-        actionMap.put("partIsOver", new UserInterface.AbstractInterface.Action() {
+        actionMap.put("GameOver", new UserInterface.AbstractInterface.Action() {
             @Override
             public void execute(int x, int y) {
                 if (overDialog == null) overDialog = createOverDialog();
@@ -274,10 +274,10 @@ public class Application {
             }
         });
 
-        actionMap.put("reLoad", new UserInterface.AbstractInterface.Action() {
+        actionMap.put("showField", new UserInterface.AbstractInterface.Action() {
             @Override
             public void execute(int x, int y) {
-                mineFieldViewer.reLoad(x, y);
+                mineFieldViewer.showField(x, y);
                 if (firstTime) {
                     applicationFrame.getInfoPanel().startClock();
                     firstTime = false;

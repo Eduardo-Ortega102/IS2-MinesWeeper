@@ -57,24 +57,24 @@ public final class SwingMineFieldViewer extends JPanel implements MineFieldViewe
     }
 
     @Override
-    public void reLoad(int posX, int posY) {
-        showSquares(posX, posY, false);
+    public void showField(int posX, int posY) {
+        executeViewer(posX, posY, false);
         countExecutedViewers();
         if ((squareNumber - count) == MineField.getInstance().getMinesNumber()) 
             this.actionFactory.getAction("Winner").execute(0, 0);
     }
 
-    private int showSquares(int posX, int posY, boolean stop) {
+    private int executeViewer(int posX, int posY, boolean stop) {
         if (stop) return 1;
         if (posY < 0 || posY == matrix[0].length) return 1;
         if (posX < 0 || posX == matrix.length) return 1;
 
         stop = matrix[posX][posY].showValue();
 
-        showSquares(posX, (posY + 1), stop);
-        showSquares(posX, (posY - 1), stop);
-        showSquares((posX + 1), posY, stop);
-        showSquares((posX - 1), posY, stop);
+        executeViewer(posX, (posY + 1), stop);
+        executeViewer(posX, (posY - 1), stop);
+        executeViewer((posX + 1), posY, stop);
+        executeViewer((posX - 1), posY, stop);
         return 0;
     }
 

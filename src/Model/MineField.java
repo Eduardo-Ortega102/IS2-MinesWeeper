@@ -41,16 +41,16 @@ public class MineField {
         return width;
     }
 
-    public static void print(Square[][] battleField) {
+    public void print() {
         int count = 0;
-        for (int i = 0; i < battleField.length; i++) {
+        for (int i = 0; i < mineField.length; i++) {
             System.out.print("(");
-            for (int j = 0; j < battleField[i].length; j++) {
-                if (battleField[i][j].isMine()) {
+            for (int j = 0; j < mineField[i].length; j++) {
+                if (mineField[i][j].hasMine()) {
                     System.out.print(" T ");
                     count++;
                 } else {
-                    System.out.print(" " + battleField[i][j].getAdjacentMines() + " ");
+                    System.out.print(" " + mineField[i][j].getAdjacentMines() + " ");
                 }
             }
             System.out.println(") ");

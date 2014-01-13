@@ -3,24 +3,19 @@ package Model;
 public class Square {
 
     private int adjacentMines;
-    private boolean mine;
+    private boolean hasMine;
 
-    public Square(boolean isMine) {
-        adjacentMines = 0;
-        mine = isMine;
+    public Square(boolean hasMine) {
+        this.adjacentMines = 0;
+        this.hasMine = hasMine;
     }
     
-    public Square(Square square){
-        this.adjacentMines = square.adjacentMines;
-        this.mine = square.mine;
-    }
-
-    public boolean isMine() {
-        return mine;
+    public boolean hasMine() {
+        return hasMine;
     }
 
     public void setMine(boolean mine) {
-        this.mine = mine;
+        this.hasMine = mine;
     }
 
     public void setAdjacentMines(int adjacentMines) {

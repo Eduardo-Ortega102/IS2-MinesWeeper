@@ -41,7 +41,7 @@ public class RandomMineFieldLoader implements MineFieldLoader {
         inicializeAdjacentMinesValue(fieldInstance.getMineField());
 
         System.out.println("CAMPO RESULTANTE: ");
-        MineField.print(fieldInstance.getMineField());
+        fieldInstance.print();
     }
 
     private void inicializeMinesPerRow(int high) {
@@ -64,11 +64,11 @@ public class RandomMineFieldLoader implements MineFieldLoader {
             for (int iteration = 0; iteration < fieldElements && minesNumber > 0; iteration++) {
                 int i = rand.nextInt(fieldInstance.getHigh());
                 int j = rand.nextInt(fieldInstance.getWidth());
-                if (mineField[i][j].isMine()) continue;
+                if (mineField[i][j].hasMine()) continue;
                 if (minesPerRow[i] == maxMinePerRow) continue;
 
                 mineField[i][j].setMine(getRandomMine(minesNumber));
-                if (mineField[i][j].isMine()) {
+                if (mineField[i][j].hasMine()) {
                     minesPerRow[i] = minesPerRow[i] + 1;
                     minesNumber--;
                 }
@@ -79,15 +79,14 @@ public class RandomMineFieldLoader implements MineFieldLoader {
 
     private boolean getRandomMine(int minesNumer) {
         if (minesNumer == 0) return false;
-        double mark = 1.0 / 2;
-        return ((Math.random()) > mark) ? false : true;
+        return ((Math.random()) > (1.0 / 2)) ? false : true;
     }
 
     private void inicializeAdjacentMinesValue(Square[][] mineField) {
         for (int i = 0; i <= (mineField.length - 1); i++) {
             for (int j = 0; j <= (mineField[i].length - 1); j++) {
 
-                if (mineField[i][j].isMine() == false) {
+                if (mineField[i][j].hasMine() == false) {
                     compareWithActualRow(i, j, mineField);
                     if (i == (mineField.length - 1)) {
                         compareWithRow(i, j, mineField, true);
@@ -140,7 +139,7 @@ public class RandomMineFieldLoader implements MineFieldLoader {
     }
 
     private void compareElements(int actualI, int actualJ, int rowI, int columnJ, Square[][] mineField) {
-        if (mineField[rowI][columnJ].isMine()) 
+        if (mineField[rowI][columnJ].hasMine()) 
             mineField[actualI][actualJ].setAdjacentMines(
                     (mineField[actualI][actualJ].getAdjacentMines() + 1));
     }

@@ -30,10 +30,10 @@ public class SwingMineViewer extends JButton implements MineViewer {
         this.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (square.isMine())
-                    factory.getAction("partIsOver").execute(0, 0);
+                if (square.hasMine())
+                    factory.getAction("GameOver").execute(0, 0);
                 else
-                    factory.getAction("reLoad").execute(posX, posY);
+                    factory.getAction("showField").execute(posX, posY);
             }
         });
 
