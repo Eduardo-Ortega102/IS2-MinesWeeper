@@ -38,7 +38,6 @@ public class RandomMineFieldLoader implements MineFieldLoader {
         inicializeMinesPerRow(fieldInstance.getHigh());
         createMineField(fieldInstance.getMineField());
         mineFieldSetter(minesNumber, fieldInstance.getMineField());
-        inicializeAdjacentMinesValue(fieldInstance.getMineField());
 
         System.out.println("CAMPO RESULTANTE: ");
         fieldInstance.print();
@@ -46,9 +45,8 @@ public class RandomMineFieldLoader implements MineFieldLoader {
 
     private void inicializeMinesPerRow(int high) {
         minesPerRow = new int[high];
-        for (int i = 0; i < minesPerRow.length; i++) {
+        for (int i = 0; i < minesPerRow.length; i++) 
             minesPerRow[i] = 0;
-        }
     }
 
     private void createMineField(Square[][] mineField) {
@@ -71,6 +69,7 @@ public class RandomMineFieldLoader implements MineFieldLoader {
                 if (mineField[i][j].hasMine()) {
                     minesPerRow[i] = minesPerRow[i] + 1;
                     minesNumber--;
+                    setAjacentMines(i,j,mineField);
                 }
             }
             maxMinePerRow += 1;
@@ -82,65 +81,26 @@ public class RandomMineFieldLoader implements MineFieldLoader {
         return ((Math.random()) > (1.0 / 2)) ? false : true;
     }
 
-    private void inicializeAdjacentMinesValue(Square[][] mineField) {
-        for (int i = 0; i <= (mineField.length - 1); i++) {
-            for (int j = 0; j <= (mineField[i].length - 1); j++) {
+    private void setAjacentMines(int i, int j, Square[][] mineField) {
+        mineField[i][j].setAdjacentMines(0);
+        increaseAdjacentSquareValue(i, j + 1, mineField);
+        increaseAdjacentSquareValue(i, j - 1, mineField);
+        
+        increaseAdjacentSquareValue(i - 1, j - 1, mineField);
+        increaseAdjacentSquareValue(i - 1, j, mineField);
+        increaseAdjacentSquareValue(i - 1, j + 1, mineField);
 
-                if (mineField[i][j].hasMine() == false) {
-                    compareWithActualRow(i, j, mineField);
-                    if (i == (mineField.length - 1)) {
-                        compareWithRow(i, j, mineField, true);
-                    } else {
-                        switch (i) {
-                            case 0:
-                                compareWithRow(i, j, mineField, false);
-                                break;
-                            default:
-                                compareWithRow(i, j, mineField, true);
-                                compareWithRow(i, j, mineField, false);
-                        }
-                    }
-                }
-            }
-        }
+        increaseAdjacentSquareValue(i + 1, j - 1, mineField);
+        increaseAdjacentSquareValue(i + 1, j, mineField);
+        increaseAdjacentSquareValue(i + 1, j + 1, mineField);
     }
 
-    private void compareWithRow(int actualI, int actualJ, Square[][] mineField, boolean previousRow) {
-        int startJ, stopJ;
-        int rowI = (previousRow) ? (actualI - 1) : (actualI + 1);
-        if (actualJ == (mineField[actualI].length - 1)) {
-            startJ = actualJ - 1;
-            stopJ = actualJ;
-        } else {
-            startJ = (actualJ == 0) ? actualJ : actualJ - 1;
-            stopJ = (actualJ + 1);
-        }
-
-        for (int columnJ = startJ; columnJ <= stopJ; columnJ++) 
-            compareElements(actualI, actualJ, rowI, columnJ, mineField);
-    }
-
-    private void compareWithActualRow(int actualI, int actualJ, Square[][] mineField) {
-        if (actualJ == mineField[actualI].length - 1) {
-            compareElements(actualI, actualJ, actualI, (actualJ - 1), mineField);
-        } else {
-            switch (actualJ) {
-                case 0:
-                    compareElements(actualI, actualJ, actualI, (actualJ + 1), mineField);
-                    break;
-                default:
-                    int j = actualJ - 1;
-                    for (int i = 0; i < 2; i++) {
-                        compareElements(actualI, actualJ, actualI, j, mineField);
-                        j = actualJ + 1;
-                    }
-            }
-        }
-    }
-
-    private void compareElements(int actualI, int actualJ, int rowI, int columnJ, Square[][] mineField) {
-        if (mineField[rowI][columnJ].hasMine()) 
-            mineField[actualI][actualJ].setAdjacentMines(
-                    (mineField[actualI][actualJ].getAdjacentMines() + 1));
+    private boolean increaseAdjacentSquareValue(int i, int j, Square[][] mineField) {
+        if (i < 0 || i > mineField.length - 1) return false;
+        if (j < 0 || j > mineField[i].length - 1) return false;
+        if (mineField[i][j].hasMine()) return false;
+        
+        mineField[i][j].setAdjacentMines(mineField[i][j].getAdjacentMines() + 1);
+        return true;
     }
 }
