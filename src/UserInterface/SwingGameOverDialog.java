@@ -1,10 +1,10 @@
 package UserInterface;
 
-import UserInterface.AbstractInterface.GameOverDialog;
+import UserInterface.AbstractInterface.Dialog;
 import java.awt.*;
 import javax.swing.*;
 
-public class SwingGameOverDialog extends JFrame implements GameOverDialog {
+public class SwingGameOverDialog extends JFrame implements Dialog {
 
     private ActionListenerFactory factory;
 

@@ -1,11 +1,11 @@
 package UserInterface;
 
-import UserInterface.AbstractInterface.HelpDialog;
+import UserInterface.AbstractInterface.Dialog;
 import java.awt.HeadlessException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-public class SwingHelpDialog extends JFrame implements HelpDialog {
+public class SwingHelpDialog extends JFrame implements Dialog {
 
     private final String text;
 
@@ -22,5 +22,9 @@ public class SwingHelpDialog extends JFrame implements HelpDialog {
     @Override
     public void showDialog() {
         JOptionPane.showMessageDialog(this, text, "How to play", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    @Override
+    public void hidDialog() {
     }
 }

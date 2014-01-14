@@ -1,6 +1,6 @@
 package UserInterface.AbstractInterface;
 
-public interface WinnerDialog {
+public interface Dialog {
 
     public void showDialog();
 

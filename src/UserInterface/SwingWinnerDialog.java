@@ -1,11 +1,11 @@
 package UserInterface;
 
-import UserInterface.AbstractInterface.WinnerDialog;
+import UserInterface.AbstractInterface.Dialog;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.HeadlessException;
 
-public class SwingWinnerDialog extends JFrame implements WinnerDialog {
+public class SwingWinnerDialog extends JFrame implements Dialog {
 
     private ActionListenerFactory factory;
 

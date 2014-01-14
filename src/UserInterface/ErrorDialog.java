@@ -1,11 +1,11 @@
 package UserInterface;
 
-import UserInterface.AbstractInterface.HelpDialog;
+import UserInterface.AbstractInterface.Dialog;
 import java.awt.HeadlessException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-public class ErrorDialog extends JFrame implements HelpDialog {
+public class ErrorDialog extends JFrame implements Dialog {
 
     private final String text;
 
@@ -17,5 +17,9 @@ public class ErrorDialog extends JFrame implements HelpDialog {
     @Override
     public void showDialog() {
         JOptionPane.showMessageDialog(this, text, "Mines Weeper Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    @Override
+    public void hidDialog() {
     }
 }

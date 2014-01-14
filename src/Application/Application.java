@@ -9,21 +9,21 @@ import Model.MineField;
 import Model.Square;
 import Persistence.FileImageSetLoader;
 import Persistence.MineFieldBuilderException;
-import Persistence.RandomMineFieldLoader;
+import Persistence.RandomMineFieldBuilder;
 import Persistence.abstractInterface.BitmapFactory;
 import Persistence.abstractInterface.ImageSetLoader;
-import Persistence.abstractInterface.MineFieldLoader;
+import Persistence.abstractInterface.MineFieldBuilder;
 import UserInterface.AbstractInterface.Action;
 import UserInterface.AbstractInterface.ActionFactory;
-import UserInterface.AbstractInterface.GameOverDialog;
-import UserInterface.AbstractInterface.HelpDialog;
+//import UserInterface.AbstractInterface.GameOverDialog;
+//import UserInterface.AbstractInterface.HelpDialog;
 import UserInterface.AbstractInterface.ImageViewer;
 import UserInterface.AbstractInterface.InfoPanel;
 import UserInterface.AbstractInterface.MineFieldViewer;
 import UserInterface.AbstractInterface.SquareViewer;
 import UserInterface.AbstractInterface.SquareViewerFactory;
 import UserInterface.AbstractInterface.OptionDialog;
-import UserInterface.AbstractInterface.WinnerDialog;
+import UserInterface.AbstractInterface.Dialog;
 import UserInterface.ActionListenerFactory;
 import UserInterface.ErrorDialog;
 import UserInterface.SwingInfoPanel;
@@ -45,11 +45,11 @@ public class Application {
     private HashMap<String, Command> commandMap;
     private HashMap<String, Action> actionMap;
     private ActionListenerFactory actionListenerFactory;
-    private MineFieldLoader mineFieldLoader;
+    private MineFieldBuilder mineFieldBuilder;
     private MineFieldViewer mineFieldViewer;
     private OptionDialog optionDialog;
-    private WinnerDialog winDialog;
-    private GameOverDialog overDialog;
+    private Dialog winDialog;
+    private Dialog gameOverDialog;
     private MinesWeeperMainFrame applicationFrame;
     private ImageViewerControlFactory imageViewerControlFactory;
     private ImageViewerControl imageViewerControl;
@@ -62,14 +62,14 @@ public class Application {
     private void execute() {
         ImageSetLoader imageSetLoader = createImageSetLoader();
         imageSetLoader.loadImageSet();
-        mineFieldLoader = createLoader();
+        mineFieldBuilder = createMineFieldBuilder();
         actionListenerFactory = createActionListenerFactory();
         optionDialog = createOptionDialog();
         mineFieldViewer = createMineFieldViewer();
-        ImageViewer viewer = createImageViewer();
-        createApplicationFrame(viewer);
+        ImageViewer imageViewer = createImageViewer();
+        createApplicationFrame(imageViewer);
         imageViewerControlFactory = createImageViewerControlFactory();
-        imageViewerControl = createImageViewerControl(viewer);
+        imageViewerControl = createImageViewerControl(imageViewer);
         createCommands();
         createActions();
         optionDialog.execute();
@@ -113,8 +113,8 @@ public class Application {
         };
     }
 
-    private MineFieldLoader createLoader() {
-        return RandomMineFieldLoader.getInstance();
+    private MineFieldBuilder createMineFieldBuilder() {
+        return RandomMineFieldBuilder.getInstance();
     }
 
     private ActionListenerFactory createActionListenerFactory() {
@@ -204,7 +204,7 @@ public class Application {
         commandMap.put("NewGame", new Command() {
             @Override
             public void executeCommand() {
-                if (overDialog != null) overDialog.hidDialog();
+                if (gameOverDialog != null) gameOverDialog.hidDialog();
                 runApplication();
             }
         });
@@ -212,7 +212,7 @@ public class Application {
         commandMap.put("Help", new Command() {
             @Override
             public void executeCommand() {
-                HelpDialog helpD = createHelpDialog();
+                Dialog helpD = createHelpDialog();
                 helpD.showDialog();
             }
         });
@@ -220,7 +220,7 @@ public class Application {
         commandMap.put("Restart", new Command() {
             @Override
             public void executeCommand() {
-                overDialog.hidDialog();
+                gameOverDialog.hidDialog();
                 mineFieldViewer.restart();
                 imageViewerControl.reset();
                 imageViewerControl.viewImage("waitIcon.jpg");
@@ -253,8 +253,8 @@ public class Application {
         actionMap.put("GameOver", new UserInterface.AbstractInterface.Action() {
             @Override
             public void execute(int x, int y) {
-                if (overDialog == null) overDialog = createOverDialog();
-                overDialog.showDialog();
+                if (gameOverDialog == null) gameOverDialog = createOverDialog();
+                gameOverDialog.showDialog();
                 applicationFrame.getInfoPanel().stopClock();
                 imageViewerControl.viewImage("loserIcon.jpg");
             }
@@ -291,32 +291,32 @@ public class Application {
         imageViewerControl.viewImage("waitIcon.jpg");
         firstTime = true;
         try {
-            mineFieldLoader.buildMineField(optionDialog.getRowsAmount(),
+            mineFieldBuilder.buildMineField(optionDialog.getRowsAmount(),
                     optionDialog.getColumnAmount(),
                     optionDialog.getMinesAmount());
             mineFieldViewer.load(MineField.getInstance());
             applicationFrame.setMinesViewer(mineFieldViewer);
             applicationFrame.execute();
         } catch (MineFieldBuilderException ex) {
-            HelpDialog errorDialog = createErrorDialog(ex.getMessage());
+            Dialog errorDialog = createErrorDialog(ex.getMessage());
             errorDialog.showDialog();
             optionDialog.execute();
         }
     }
 
-    private WinnerDialog createWinnerDialog() {
+    private Dialog createWinnerDialog() {
         return new SwingWinnerDialog(actionListenerFactory);
     }
 
-    private GameOverDialog createOverDialog() {
+    private Dialog createOverDialog() {
         return new SwingGameOverDialog(actionListenerFactory);
     }
 
-    private HelpDialog createHelpDialog() {
+    private Dialog createHelpDialog() {
         return new SwingHelpDialog();
     }
 
-    private HelpDialog createErrorDialog(String message) {
+    private Dialog createErrorDialog(String message) {
         return new ErrorDialog(message);
     }
 }

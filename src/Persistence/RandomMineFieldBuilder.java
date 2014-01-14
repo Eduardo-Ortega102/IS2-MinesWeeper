@@ -1,24 +1,24 @@
 package Persistence;
 
-import Persistence.abstractInterface.MineFieldLoader;
+import Persistence.abstractInterface.MineFieldBuilder;
 import Model.MineField;
 import Model.Square;
 import java.util.Random;
 
-public class RandomMineFieldLoader implements MineFieldLoader {
+public class RandomMineFieldBuilder implements MineFieldBuilder {
 
     private static MineField fieldInstance;
-    private static RandomMineFieldLoader loaderInstance;
+    private static RandomMineFieldBuilder loaderInstance;
     private static int[] minesPerRow;
     private static int maxMinePerRow;
 
-    private RandomMineFieldLoader() {
+    private RandomMineFieldBuilder() {
         maxMinePerRow = 1;
     }
 
-    public static RandomMineFieldLoader getInstance() {
+    public static RandomMineFieldBuilder getInstance() {
         if (loaderInstance == null)
-            loaderInstance = new RandomMineFieldLoader();
+            loaderInstance = new RandomMineFieldBuilder();
         return loaderInstance;
     }
 
