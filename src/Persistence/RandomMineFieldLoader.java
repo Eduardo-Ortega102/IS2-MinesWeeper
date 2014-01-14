@@ -17,22 +17,22 @@ public class RandomMineFieldLoader implements MineFieldLoader {
     }
 
     public static RandomMineFieldLoader getInstance() {
-        if (loaderInstance == null) 
+        if (loaderInstance == null)
             loaderInstance = new RandomMineFieldLoader();
         return loaderInstance;
     }
 
     private boolean checkParameters(int high, int width, int minesNumber) {
-        if(high < 9 || high > 24) return false;
-        if(width < 9 || width > 30) return false;
-        if(minesNumber < 10 || minesNumber >= high*width || minesNumber > 668) return false;
+        if (high < 9 || high > 24) return false;
+        if (width < 9 || width > 30) return false;
+        if (minesNumber < 10 || minesNumber >= high * width || minesNumber > 668)
+            return false;
         return true;
     }
 
     @Override
     public void buildMineField(int high, int width, int minesNumber) throws MineFieldBuilderException {
-        if (!checkParameters(high, width, minesNumber))
-            throw new MineFieldBuilderException();
+        if (!checkParameters(high, width, minesNumber)) throw new MineFieldBuilderException();
         MineField.createInstance(high, width, minesNumber);
         fieldInstance = MineField.getInstance();
         inicializeMinesPerRow(fieldInstance.getHigh());
@@ -45,7 +45,7 @@ public class RandomMineFieldLoader implements MineFieldLoader {
 
     private void inicializeMinesPerRow(int high) {
         minesPerRow = new int[high];
-        for (int i = 0; i < minesPerRow.length; i++) 
+        for (int i = 0; i < minesPerRow.length; i++)
             minesPerRow[i] = 0;
     }
 
@@ -69,7 +69,7 @@ public class RandomMineFieldLoader implements MineFieldLoader {
                 if (mineField[i][j].hasMine()) {
                     minesPerRow[i] = minesPerRow[i] + 1;
                     minesNumber--;
-                    setAjacentMines(i,j,mineField);
+                    setAjacentMines(i, j, mineField);
                 }
             }
             maxMinePerRow += 1;
@@ -82,25 +82,16 @@ public class RandomMineFieldLoader implements MineFieldLoader {
     }
 
     private void setAjacentMines(int i, int j, Square[][] mineField) {
-        mineField[i][j].setAdjacentMines(0);
-        increaseAdjacentSquareValue(i, j + 1, mineField);
-        increaseAdjacentSquareValue(i, j - 1, mineField);
-        
-        increaseAdjacentSquareValue(i - 1, j - 1, mineField);
-        increaseAdjacentSquareValue(i - 1, j, mineField);
-        increaseAdjacentSquareValue(i - 1, j + 1, mineField);
-
-        increaseAdjacentSquareValue(i + 1, j - 1, mineField);
-        increaseAdjacentSquareValue(i + 1, j, mineField);
-        increaseAdjacentSquareValue(i + 1, j + 1, mineField);
+        for (int k = i - 1; k <= i + 1; k++) 
+            for (int m = j - 1; m <= j + 1; m++) 
+                increaseAdjacentSquareValue(k, m, mineField);
     }
 
-    private boolean increaseAdjacentSquareValue(int i, int j, Square[][] mineField) {
-        if (i < 0 || i > mineField.length - 1) return false;
-        if (j < 0 || j > mineField[i].length - 1) return false;
-        if (mineField[i][j].hasMine()) return false;
-        
+    private void increaseAdjacentSquareValue(int i, int j, Square[][] mineField) {
+        if (i < 0 || i > mineField.length - 1) return;
+        if (j < 0 || j > mineField[i].length - 1) return;
+        if (mineField[i][j].hasMine()) return;
+
         mineField[i][j].setAdjacentMines(mineField[i][j].getAdjacentMines() + 1);
-        return true;
     }
 }

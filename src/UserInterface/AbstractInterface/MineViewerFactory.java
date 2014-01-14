@@ -4,6 +4,6 @@ import Model.Square;
 
 public interface MineViewerFactory {
     
-    public MineViewer createMineViewer(int posX, int posY, Square square, ActionFactory factory);
+    public SquareViewer createMineViewer(int posX, int posY, Square square, ActionFactory factory);
 
 }

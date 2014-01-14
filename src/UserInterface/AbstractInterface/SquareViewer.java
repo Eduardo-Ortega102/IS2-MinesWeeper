@@ -1,6 +1,6 @@
 package UserInterface.AbstractInterface;
 
-public interface MineViewer {
+public interface SquareViewer {
 
     public boolean showValue();
 

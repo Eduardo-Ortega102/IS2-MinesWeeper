@@ -1,6 +1,6 @@
 package UserInterface;
 
-import UserInterface.AbstractInterface.MineViewer;
+import UserInterface.AbstractInterface.SquareViewer;
 import UserInterface.AbstractInterface.ActionFactory;
 import Model.Square;
 import java.awt.event.ActionEvent;
@@ -9,14 +9,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.*;
 
-public class SwingMineViewer extends JButton implements MineViewer {
+public class SwingSquareViewer extends JButton implements SquareViewer {
 
     private int posX;
     private int posY;
     private final Square square;
     private final ActionFactory factory;
 
-    public SwingMineViewer(int posX, int posY, Square square, final ActionFactory factory) {
+    public SwingSquareViewer(int posX, int posY, Square square, final ActionFactory factory) {
         super("   ");
         this.factory = factory;
         this.posX = posX;

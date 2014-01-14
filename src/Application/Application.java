@@ -20,7 +20,7 @@ import UserInterface.AbstractInterface.HelpDialog;
 import UserInterface.AbstractInterface.ImageViewer;
 import UserInterface.AbstractInterface.InfoPanel;
 import UserInterface.AbstractInterface.MineFieldViewer;
-import UserInterface.AbstractInterface.MineViewer;
+import UserInterface.AbstractInterface.SquareViewer;
 import UserInterface.AbstractInterface.MineViewerFactory;
 import UserInterface.AbstractInterface.OptionDialog;
 import UserInterface.AbstractInterface.WinnerDialog;
@@ -33,7 +33,7 @@ import UserInterface.SwingBitmap;
 import UserInterface.SwingGameOverDialog;
 import UserInterface.SwingHelpDialog;
 import UserInterface.SwingMineFieldViewer;
-import UserInterface.SwingMineViewer;
+import UserInterface.SwingSquareViewer;
 import UserInterface.SwingOptionDialog;
 import UserInterface.SwingWinnerDialog;
 import java.awt.event.ActionEvent;
@@ -143,8 +143,8 @@ public class Application {
     private MineViewerFactory createMineViewerFactory() {
         return new MineViewerFactory() {
             @Override
-            public MineViewer createMineViewer(int posX, int posY, Square square, ActionFactory factory) {
-                return new SwingMineViewer(posX, posY, square, factory);
+            public SquareViewer createMineViewer(int posX, int posY, Square square, ActionFactory factory) {
+                return new SwingSquareViewer(posX, posY, square, factory);
             }
         };
     }

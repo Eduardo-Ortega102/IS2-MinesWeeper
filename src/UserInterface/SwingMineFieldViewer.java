@@ -2,7 +2,7 @@ package UserInterface;
 
 import UserInterface.AbstractInterface.MineFieldViewer;
 import UserInterface.AbstractInterface.ActionFactory;
-import UserInterface.AbstractInterface.MineViewer;
+import UserInterface.AbstractInterface.SquareViewer;
 import UserInterface.AbstractInterface.MineViewerFactory;
 import Model.MineField;
 import java.awt.*;
@@ -10,7 +10,7 @@ import javax.swing.*;
 
 public final class SwingMineFieldViewer extends JPanel implements MineFieldViewer {
 
-    private MineViewer[][] matrix;
+    private SquareViewer[][] matrix;
     private MineViewerFactory mineViewerFactory;
     private ActionFactory actionFactory;
     private int squareNumber;
@@ -24,7 +24,7 @@ public final class SwingMineFieldViewer extends JPanel implements MineFieldViewe
     @Override
     public void load(MineField mineField) {
         if (matrix != null) clearViewer();
-        matrix = new MineViewer[mineField.getHigh()][mineField.getWidth()];
+        matrix = new SquareViewer[mineField.getHigh()][mineField.getWidth()];
         squareNumber = mineField.getHigh() * mineField.getWidth();
         this.setLayout(new GridLayout(mineField.getHigh(), mineField.getWidth()));
         this.createMatrix(mineField);
