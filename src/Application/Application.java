@@ -21,7 +21,7 @@ import UserInterface.AbstractInterface.ImageViewer;
 import UserInterface.AbstractInterface.InfoPanel;
 import UserInterface.AbstractInterface.MineFieldViewer;
 import UserInterface.AbstractInterface.SquareViewer;
-import UserInterface.AbstractInterface.MineViewerFactory;
+import UserInterface.AbstractInterface.SquareViewerFactory;
 import UserInterface.AbstractInterface.OptionDialog;
 import UserInterface.AbstractInterface.WinnerDialog;
 import UserInterface.ActionListenerFactory;
@@ -137,13 +137,13 @@ public class Application {
     }
 
     private MineFieldViewer createMineFieldViewer() {
-        return new SwingMineFieldViewer(createMineViewerFactory(), createActionFactory());
+        return new SwingMineFieldViewer(createSquareViewerFactory(), createActionFactory());
     }
 
-    private MineViewerFactory createMineViewerFactory() {
-        return new MineViewerFactory() {
+    private SquareViewerFactory createSquareViewerFactory() {
+        return new SquareViewerFactory() {
             @Override
-            public SquareViewer createMineViewer(int posX, int posY, Square square, ActionFactory factory) {
+            public SquareViewer createSquareViewer(int posX, int posY, Square square, ActionFactory factory) {
                 return new SwingSquareViewer(posX, posY, square, factory);
             }
         };

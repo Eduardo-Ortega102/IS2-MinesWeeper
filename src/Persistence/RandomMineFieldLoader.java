@@ -37,7 +37,7 @@ public class RandomMineFieldLoader implements MineFieldLoader {
         fieldInstance = MineField.getInstance();
         inicializeMinesPerRow(fieldInstance.getHigh());
         createMineField(fieldInstance.getMineField());
-        mineFieldSetter(minesNumber, fieldInstance.getMineField());
+        minesSetter(minesNumber, fieldInstance.getMineField());
 
         System.out.println("CAMPO RESULTANTE: ");
         fieldInstance.print();
@@ -55,7 +55,7 @@ public class RandomMineFieldLoader implements MineFieldLoader {
                 mineField[i][j] = new Square(false);
     }
 
-    private void mineFieldSetter(int minesNumber, Square[][] mineField) {
+    private void minesSetter(int minesNumber, Square[][] mineField) {
         int fieldElements = fieldInstance.getHigh() * fieldInstance.getWidth();
         Random rand = new Random();
         while (minesNumber > 0) {
