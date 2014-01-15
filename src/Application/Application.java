@@ -4,6 +4,7 @@ import Control.Command;
 import Control.ImagePriority;
 import Control.ImageViewerControl;
 import Control.ImageViewerControlFactory;
+import Control.ShowCommand;
 import Model.abstractInterface.Bitmap;
 import Model.MineField;
 import Model.Square;
@@ -43,7 +44,6 @@ import java.util.HashMap;
 public class Application {
 
     private HashMap<String, Command> commandMap;
-    private HashMap<String, Action> actionMap;
     private ActionListenerFactory actionListenerFactory;
     private MineFieldBuilder mineFieldBuilder;
     private MineFieldViewer mineFieldViewer;
@@ -71,7 +71,6 @@ public class Application {
         imageViewerControlFactory = createImageViewerControlFactory();
         imageViewerControl = createImageViewerControl(imageViewer);
         createCommands();
-        createActions();
         optionDialog.execute();
     }
 
@@ -156,8 +155,16 @@ public class Application {
                 return new Action() {
                     @Override
                     public void execute(int x, int y) {
-                        Action actionM = actionMap.get(action);
-                        if (actionM != null) actionM.execute(x, y);
+                        Command command= commandMap.get(action);
+                        if (command != null)
+                            if (checkCommand(command)) 
+                                ((ShowCommand) command).execute(x, y);
+                            else
+                                command.executeCommand();
+                    }
+
+                    private boolean checkCommand(Command command) {
+                        return (command instanceof ShowCommand);
                     }
                 };
             }
@@ -229,20 +236,9 @@ public class Application {
             }
         });
 
-        commandMap.put("Exit", new Command() {
+        commandMap.put("Winner", new Command() {
             @Override
             public void executeCommand() {
-                System.exit(0);
-            }
-        });
-    }
-
-    private void createActions() {
-        actionMap = new HashMap<>();
-
-        actionMap.put("Winner", new UserInterface.AbstractInterface.Action() {
-            @Override
-            public void execute(int x, int y) {
                 if (winDialog == null) winDialog = createWinnerDialog();
                 winDialog.showDialog();
                 imageViewerControl.viewImage("winnerIcon.jpg");
@@ -250,9 +246,9 @@ public class Application {
             }
         });
 
-        actionMap.put("GameOver", new UserInterface.AbstractInterface.Action() {
+        commandMap.put("GameOver", new Command() {
             @Override
-            public void execute(int x, int y) {
+            public void executeCommand() {
                 if (gameOverDialog == null) gameOverDialog = createOverDialog();
                 gameOverDialog.showDialog();
                 applicationFrame.getInfoPanel().stopClock();
@@ -260,21 +256,23 @@ public class Application {
             }
         });
 
-        actionMap.put("MineViewerSelected", new UserInterface.AbstractInterface.Action() {
+        commandMap.put("MineViewerSelected", new Command() {
+
             @Override
-            public void execute(int x, int y) {
+            public void executeCommand() {
                 imageViewerControl.viewImage("moveIcon.jpg");
             }
         });
 
-        actionMap.put("MineViewerUnselected", new UserInterface.AbstractInterface.Action() {
+        commandMap.put("MineViewerUnselected", new Command() {
+
             @Override
-            public void execute(int x, int y) {
+            public void executeCommand() {
                 imageViewerControl.viewImage("waitIcon.jpg");
             }
         });
-
-        actionMap.put("showField", new UserInterface.AbstractInterface.Action() {
+        
+        commandMap.put("showField", new ShowCommand() {
             @Override
             public void execute(int x, int y) {
                 mineFieldViewer.showField(x, y);
@@ -282,6 +280,17 @@ public class Application {
                     applicationFrame.getInfoPanel().startClock();
                     firstTime = false;
                 }
+            }
+
+            @Override
+            public void executeCommand() {
+            }
+        });
+        
+        commandMap.put("Exit", new Command() {
+            @Override
+            public void executeCommand() {
+                System.exit(0);
             }
         });
     }
