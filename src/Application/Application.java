@@ -16,8 +16,6 @@ import Persistence.abstractInterface.ImageSetLoader;
 import Persistence.abstractInterface.MineFieldBuilder;
 import UserInterface.AbstractInterface.Action;
 import UserInterface.AbstractInterface.ActionFactory;
-//import UserInterface.AbstractInterface.GameOverDialog;
-//import UserInterface.AbstractInterface.HelpDialog;
 import UserInterface.AbstractInterface.ImageViewer;
 import UserInterface.AbstractInterface.InfoPanel;
 import UserInterface.AbstractInterface.MineFieldViewer;
@@ -98,9 +96,9 @@ public class Application {
 
     private ImageSetLoader createImageSetLoader() {
         return new FileImageSetLoader(
+                createBitmapFactory(),
                 "src\\Icons",
-                new String[]{"winnerIcon.jpg", "waitIcon.jpg", "moveIcon.jpg", "loserIcon.jpg"},
-                createBitmapFactory());
+                "winnerIcon.jpg", "waitIcon.jpg", "moveIcon.jpg", "loserIcon.jpg");
     }
 
     private BitmapFactory createBitmapFactory() {

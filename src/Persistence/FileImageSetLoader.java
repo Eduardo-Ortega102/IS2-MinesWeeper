@@ -10,7 +10,7 @@ public class FileImageSetLoader implements ImageSetLoader {
     private final String[] filenames;
     private final BitmapFactory factory;
 
-    public FileImageSetLoader(String path, String[] filenames, BitmapFactory factory) {
+    public FileImageSetLoader(BitmapFactory factory, String path, String... filenames) {
         this.path = path;
         this.filenames = filenames;
         this.factory = factory;
