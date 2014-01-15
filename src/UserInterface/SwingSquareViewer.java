@@ -30,10 +30,12 @@ public class SwingSquareViewer extends JButton implements SquareViewer {
         this.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                UserInterface.AbstractInterface.Action act = null;
                 if (square.hasMine())
-                    factory.getAction("GameOver").execute(0, 0);
+                    act = factory.getAction("GameOver");
                 else
-                    factory.getAction("showField").execute(posX, posY);
+                    act = factory.getAction("showField");
+                if (act != null) act.execute(posX, posY);
             }
         });
 
@@ -47,23 +49,28 @@ public class SwingSquareViewer extends JButton implements SquareViewer {
             @Override
             public void mousePressed(MouseEvent e) {
                 pressed = true;
-                factory.getAction("MineViewerSelected").execute(0, 0);
+                UserInterface.AbstractInterface.Action act = factory.getAction("SquareViewerSelected");
+                if (act != null) act.execute(0, 0);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 pressed = false;
-                factory.getAction("MineViewerUnselected").execute(0, 0);
+                UserInterface.AbstractInterface.Action act = factory.getAction("SquareViewerUnselected");
+                if (act != null) act.execute(0, 0);
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                if (pressed) factory.getAction("MineViewerSelected").execute(0, 0);
+                UserInterface.AbstractInterface.Action act = null;
+                if (pressed) act = factory.getAction("SquareViewerSelected");
+                if (act != null) act.execute(0, 0);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                factory.getAction("MineViewerUnselected").execute(0, 0);
+                UserInterface.AbstractInterface.Action act = factory.getAction("SquareViewerUnselected");
+                if (act != null) act.execute(0, 0);
             }
         });
     }

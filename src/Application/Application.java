@@ -256,7 +256,7 @@ public class Application {
             }
         });
 
-        commandMap.put("MineViewerSelected", new Command() {
+        commandMap.put("SquareViewerSelected", new Command() {
 
             @Override
             public void executeCommand() {
@@ -264,7 +264,7 @@ public class Application {
             }
         });
 
-        commandMap.put("MineViewerUnselected", new Command() {
+        commandMap.put("SquareViewerUnselected", new Command() {
 
             @Override
             public void executeCommand() {
