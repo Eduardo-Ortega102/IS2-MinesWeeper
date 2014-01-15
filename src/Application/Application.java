@@ -151,7 +151,7 @@ public class Application {
     private ActionFactory createActionFactory() {
         return new ActionFactory() {
             @Override
-            public UserInterface.AbstractInterface.Action getAction(final String action) {
+            public Action getAction(final String action) {
                 return new Action() {
                     @Override
                     public void execute(int x, int y) {
